@@ -1,0 +1,31 @@
+[configuration]
+
+entry_symbol = "yaml_library_init"
+compatibility_minimum = "4.3"
+reloadable = true
+
+[libraries]
+
+windows.debug.x86_64 = "res://addons/yaml/bin/libgdyaml.windows.debug.x86_64.dll"
+windows.release.x86_64 = "res://addons/yaml/bin/libgdyaml.windows.release.x86_64.dll"
+
+linux.debug.x86_64 = "res://addons/yaml/bin/libgdyaml.linux.debug.x86_64.so"
+linux.release.x86_64 = "res://addons/yaml/bin/libgdyaml.linux.release.x86_64.so"
+
+macos.debug = "res://addons/yaml/bin/libgdyaml.macos.debug"
+macos.release = "res://addons/yaml/bin/libgdyaml.macos.release"
+
+android.debug.arm64 = "res://addons/yaml/bin/libgdyaml.android.debug.arm64.so"
+android.release.arm64 = "res://addons/yaml/bin/libgdyaml.android.release.arm64.so"
+
+android.debug.x86_64 = "res://addons/yaml/bin/libgdyaml.android.debug.x86_64.so"
+android.release.x86_64 = "res://addons/yaml/bin/libgdyaml.android.release.x86_64.so"
+
+[icons]
+
+YAML = "res://addons/yaml/icon.svg"
+YAMLResult = "res://addons/yaml/icon.svg"
+YAMLSecurity = "res://addons/yaml/icon.svg"
+YAMLStyle = "res://addons/yaml/icon.svg"
+Schema = "res://addons/yaml/icon-schema.svg"
+SchemaValidationResult = "res://addons/yaml/icon-schema.svg"

@@ -1,0 +1,191 @@
+[gd_resource type="Resource" script_class="TriggerTemplates" format=3 uid="uid://bp7w84ksmuoxw"]
+
+[ext_resource type="Script" uid="uid://dm6rrbnqy65rd" path="res://Core/scripts/resources/templates/trigger_templates.gd" id="1_0pade"]
+
+[resource]
+script = ExtResource("1_0pade")
+templates = Dictionary[String, String]({
+"Camera follow": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Camera Follow=\"_$Model\" />
+  </Actions>
+</Loop>
+",
+"Camera stop": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Camera Stop=\"1\"/>
+  </Actions>
+</Loop>
+",
+"End game lose": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <EndGame Result=\"Loss\" Model=\"Player\" Frames=\"120\"/>
+  </Actions>
+</Loop>
+",
+"End game win": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <EndGame Result=\"Win\" Model=\"Player\" Frames=\"120\"/>
+  </Actions>
+</Loop>
+",
+"Kill model": "<Init>
+<SetVariable Name=\"$Active\" Value=\"1\"/>
+<SetVariable Name=\"$AI\" Value=\"0\" />
+<SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+<Events>
+<Enter/>
+</Events>
+<Actions>
+<Kill Model=\"_$Model\" />
+</Actions>
+</Loop>",
+"Play sound": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Sound Name=\"birds1\" />
+  </Actions>
+</Loop>
+",
+"Press key": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+",
+"Show message on screen": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <MessageOnScreen Text=\"Hello\" Color=\"#FFFFFFFF\" Frames=\"120\" AppearStyle=\"Fade\" DisappearStyle=\"Fade\"/>
+  </Actions>
+</Loop>
+",
+"Toggle control": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Control Switch=\"On\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+",
+"Transform trigger": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+
+<Loop>
+  <Events> <Enter/> </Events>
+  <Actions>
+    <Transform Name=\"TransformNameHere\"/>
+  </Actions>
+</Loop>
+",
+"Zoom Default": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Camera Zoom=\"1.00\" />
+  </Actions>
+</Loop>
+",
+"Zoom Max": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Camera Zoom=\"1.1\" />
+  </Actions>
+</Loop>
+",
+"Zoom Min": "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Camera Zoom=\"0.65\" />
+  </Actions>
+</Loop>
+"
+})
+"Edit template" = "Templates..."
+"Duplicate template" = "Templates..."
+metadata/_custom_type_script = "uid://dm6rrbnqy65rd"

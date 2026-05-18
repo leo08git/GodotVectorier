@@ -1,0 +1,356 @@
+[gd_scene format=3 uid="uid://cx4ipju20flhe"]
+
+[ext_resource type="Script" uid="uid://4xnsgdu44mkc" path="res://Core/scripts/main.gd" id="1_ky17r"]
+[ext_resource type="Texture2D" uid="uid://b5f0nncygs47p" path="res://user/Resource/GameTextures/hunter_3.png" id="3_hsd57"]
+[ext_resource type="Script" uid="uid://blhlo6lga6f4o" path="res://Core/scripts/classes/SpaceBased/class_spawn_location.gd" id="4_hsd57"]
+[ext_resource type="Script" uid="uid://b8ywmahn8mr4h" path="res://Core/scripts/classes/SpriteBased/class_image.gd" id="4_seymu"]
+[ext_resource type="Script" uid="uid://1k5fmfdyuqs" path="res://Core/scripts/classes/Abstract/class_model.gd" id="5_seymu"]
+[ext_resource type="Script" uid="uid://dddqw0fkkdcox" path="res://Core/scripts/classes/SpaceBased/class_camera.gd" id="6_xcjri"]
+[ext_resource type="Texture2D" uid="uid://ciy8nedn0nlg8" path="res://user/Resource/GameTextures/v_black.png" id="7_qptv8"]
+[ext_resource type="PackedScene" uid="uid://cwal0qfn1frnq" path="res://Core/dependency/instances/Platform.scn" id="9_5phti"]
+[ext_resource type="PackedScene" uid="uid://bw5v4qobjrvt8" path="res://Core/dependency/instances/Trapezoid.scn" id="9_gpmhh"]
+[ext_resource type="Texture2D" uid="uid://dxxsh7iwvy5bv" path="res://user/Resource/GameTextures/v_slope_L.png" id="12_s76jn"]
+[ext_resource type="PackedScene" uid="uid://but4mc3bita71" path="res://user/Pack/ObjectPack/Objects/Geometry/Outbuilding1700x1400.scn" id="15_5phti"]
+[ext_resource type="PackedScene" uid="uid://b3m7wkuwqsggf" path="res://user/Pack/ObjectPack/Objects/Geometry/Outbuilding1000x1000.scn" id="16_3n5my"]
+[ext_resource type="Texture2D" uid="uid://ddqcndkrmbxyi" path="res://Core/resource/texture/trigger_default_texture.tres" id="16_6r2s4"]
+[ext_resource type="Texture2D" uid="uid://bn0n802eo6bi6" path="res://user/Resource/GameTextures/v_bg.png" id="16_inljj"]
+[ext_resource type="Script" uid="uid://c4ag38qtr1hm7" path="res://Core/scripts/classes/SpriteBased/class_trigger.gd" id="17_3n5my"]
+[ext_resource type="Script" uid="uid://it6crdvc0hkk" path="res://Core/scripts/utilities/FileOrganizer.gd" id="17_6r2s4"]
+[ext_resource type="PackedScene" uid="uid://ddi1n4f5rn4f1" path="res://user/Pack/ObjectPack/Objects/Obstacle/Gas_diving_kong.scn" id="17_xan23"]
+[ext_resource type="PackedScene" uid="uid://b0vnm4ov0s6sy" path="res://user/Pack/ObjectPack/Objects/Obstacle/Gas_popvault.scn" id="18_3n5my"]
+[ext_resource type="PackedScene" uid="uid://dgnd61frlp30r" path="res://user/Pack/ObjectPack/Objects/Trigger/TriggerCameraStart.scn" id="19_xan23"]
+
+[node name="Root" type="Node2D" unique_id=1239310306]
+script = ExtResource("1_ky17r")
+level_name = "Leo's Level"
+music_name = "music_pk"
+
+[node name="VBg" type="Sprite2D" parent="." unique_id=1860264657]
+visible = false
+texture = ExtResource("16_inljj")
+centered = false
+script = ExtResource("4_seymu")
+factor = 0.05
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Building" type="Node2D" parent="." unique_id=1853962717]
+metadata/_editor_processed = 1
+
+[node name="@Sprite2D@32781" type="Sprite2D" parent="Building" unique_id=318398064]
+position = Vector2(2900, 150.00003)
+scale = Vector2(17.159998, 98.799995)
+texture = ExtResource("7_qptv8")
+centered = false
+script = ExtResource("4_seymu")
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="@Sprite2D@32782" parent="Building" unique_id=1765993301 instance=ExtResource("9_5phti")]
+position = Vector2(2900, 150.00003)
+scale = Vector2(26.812496, 154.375)
+"Change class" = "Classes..."
+
+[node name="VBlack3" type="Sprite2D" parent="Building" unique_id=1780275392]
+position = Vector2(2437, 381)
+scale = Vector2(9.280001, 94.17999)
+texture = ExtResource("7_qptv8")
+centered = false
+script = ExtResource("4_seymu")
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="@Sprite2D@32783" parent="Building" unique_id=190302645 instance=ExtResource("9_5phti")]
+position = Vector2(2437, 381)
+scale = Vector2(14.500001, 147.15623)
+"Change class" = "Classes..."
+
+[node name="Trapezoid" parent="Building" unique_id=1097507307 instance=ExtResource("9_gpmhh")]
+position = Vector2(2437, 380.99997)
+scale = Vector2(0.46363294, 0.46363294)
+metadata/_editor_processed = 1
+
+[node name="VSlopeL" type="Sprite2D" parent="Building" unique_id=1283562629]
+show_behind_parent = true
+position = Vector2(2437, 150.00002)
+scale = Vector2(1.8124999, 1.8124999)
+texture = ExtResource("12_s76jn")
+centered = false
+script = ExtResource("4_seymu")
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Player" type="Sprite2D" parent="." unique_id=185756159]
+position = Vector2(-870.5, 410)
+texture = ExtResource("3_hsd57")
+centered = false
+script = ExtResource("4_hsd57")
+spawn_id = "Player"
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Player_model" type="Node" parent="Player" unique_id=2064790694]
+script = ExtResource("5_seymu")
+attributes = {
+&"AI": 0,
+&"BirthSpawn": &"Player",
+&"Color": Color(0, 0, 0, 1),
+&"Name": "Player",
+&"Time": 0.0,
+&"Type": 1
+}
+"Change class" = "Classes..."
+
+[node name="Hunter" type="Sprite2D" parent="." unique_id=798154609]
+position = Vector2(-1230, 417)
+texture = ExtResource("3_hsd57")
+centered = false
+script = ExtResource("4_hsd57")
+spawn_id = "HunterSpawn"
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Hunter_model" type="Node" parent="Hunter" unique_id=1850310676]
+script = ExtResource("5_seymu")
+attributes = {
+&"AI": 1,
+&"Arrests": "Player",
+&"BirthSpawn": "HunterSpawn",
+&"Color": Color(0, 0, 0, 1),
+&"Icon": 1,
+&"Murders": "Player|Helper",
+&"Name": "Hunter",
+&"Skins": "Hunter",
+&"Time": 0.1,
+&"Type": 0
+}
+"Change class" = "Classes..."
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=560009619]
+position = Vector2(466, 381)
+zoom = Vector2(0.545, 0.545)
+script = ExtResource("6_xcjri")
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="VBlack" type="Sprite2D" parent="." unique_id=1740999848]
+position = Vector2(1340, 434)
+scale = Vector2(17.159998, 93.119995)
+texture = ExtResource("7_qptv8")
+centered = false
+script = ExtResource("4_seymu")
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Platform" parent="VBlack" unique_id=767417449 instance=ExtResource("9_5phti")]
+scale = Vector2(1.5624999, 1.5624999)
+"Change class" = "Classes..."
+
+[node name="AI1_Pathway" type="Node2D" parent="." unique_id=703006310]
+metadata/_editor_processed = 1
+
+[node name="Ai1PathWay" type="Sprite2D" parent="AI1_Pathway" unique_id=1807162566]
+position = Vector2(-262.98392, 456.30322)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Down\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Ai1PathWay2" type="Sprite2D" parent="AI1_Pathway" unique_id=827494067]
+position = Vector2(518, 613)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Ai1PathWay5" type="Sprite2D" parent="AI1_Pathway" unique_id=912057126]
+position = Vector2(1139, 613)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Ai1PathWay3" type="Sprite2D" parent="AI1_Pathway" unique_id=1525623931]
+position = Vector2(2177.622, 289.82)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Ai1PathWay7" type="Sprite2D" parent="AI1_Pathway" unique_id=468459837]
+position = Vector2(1516, 289.82)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Ai1PathWay4" type="Sprite2D" parent="AI1_Pathway" unique_id=651370883]
+position = Vector2(3440.9998, -4.409294)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Ai1PathWay6" type="Sprite2D" parent="AI1_Pathway" unique_id=977611924]
+position = Vector2(3151, -4.409294)
+scale = Vector2(2.4999998, 4.875)
+texture = ExtResource("16_6r2s4")
+centered = false
+script = ExtResource("17_3n5my")
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"1\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Loop>
+  <Events>
+    <Enter/>
+  </Events>
+  <Actions>
+    <Press Key=\"Up\" Model=\"_$Model\" />
+  </Actions>
+</Loop>
+"
+"Load trigger preset" = "Presets..."
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="FileOrganizer" type="Node" parent="." unique_id=810293204]
+script = ExtResource("17_6r2s4")
+dir = "C:/Users/PC/Documents/Development projects/Godot projects/vectorier_godot/user/Pack/ObjectPack/Objects"
+max_operations_per_frame = 5
+metadata/_editor_processed = 1
+
+[node name="Outbuilding1700x1400" parent="." unique_id=1037282028 instance=ExtResource("15_5phti")]
+position = Vector2(-1671, 635)
+metadata/_editor_processed = 1
+
+[node name="Outbuilding1000x1000" parent="." unique_id=2034797668 instance=ExtResource("16_3n5my")]
+position = Vector2(156, 761)
+metadata/_editor_processed = 1
+
+[node name="Outbuilding1000x1001" parent="." unique_id=505558257 instance=ExtResource("16_3n5my")]
+position = Vector2(747, 761)
+metadata/_editor_processed = 1
+
+[node name="Gas_diving_kong" parent="." unique_id=418949073 instance=ExtResource("17_xan23")]
+position = Vector2(1656, 343)
+metadata/_editor_processed = 1
+
+[node name="Gas_popvault" parent="." unique_id=717764890 instance=ExtResource("18_3n5my")]
+position = Vector2(3341, -30)
+metadata/_editor_processed = 1
+
+[node name="TriggerCameraStart" parent="." unique_id=1997010705 instance=ExtResource("19_xan23")]
+position = Vector2(-149, 274)
+metadata/_editor_processed = 1

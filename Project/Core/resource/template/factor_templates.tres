@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FactorTemplates" format=3 uid="uid://fif143ej6fad"]
+
+[ext_resource type="Script" uid="uid://dyybkdm12pw0" path="res://Core/scripts/resources/templates/factor_templates.gd" id="1_8hkgw"]
+
+[resource]
+script = ExtResource("1_8hkgw")
+templates = Dictionary[String, float]({
+"Backdrop": 0.5,
+"Main": 1.0,
+"Overlay": 1.0000001,
+"background": 0.05
+})
+metadata/_custom_type_script = "uid://dyybkdm12pw0"

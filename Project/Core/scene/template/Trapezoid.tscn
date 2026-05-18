@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dtan3crq3cr7h"]
+
+[ext_resource type="Texture2D" uid="uid://c3kl1rnb1d2xa" path="res://Core/resource/texture/trapezoid_type1.png" id="1_oll4a"]
+[ext_resource type="Script" uid="uid://cw6cqdpsiwp1e" path="res://Core/scripts/classes/SpriteBased/class_trapezoid.gd" id="1_scs14"]
+
+[node name="Trapezoid" type="Sprite2D" unique_id=108407387]
+texture = ExtResource("1_oll4a")
+centered = false
+script = ExtResource("1_scs14")
+presets = "Select..."
+"Change class" = "Classes..."

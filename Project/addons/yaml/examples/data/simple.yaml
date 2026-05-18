@@ -1,0 +1,7 @@
+title: Godot YAML
+author: FimbulWorks
+release_year: 2025
+features:
+  - Speaks fluent Variant and can be taught custom classes
+  - Strong document formatting capabilities
+  - Blazingly fast

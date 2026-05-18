@@ -1,0 +1,58 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[GodotVectorier]
+
+config/game_folder="C:\\Program Files (x86)\\Steam\\steamapps\\common\\Vector"
+config/log_map_path="res://Core/last_built_level.xml"
+config/textures_folder="res://user/Resource/GameTextures/"
+config/snap_coordinates_to_2_decimals=true
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="GodotVectorier"
+config/features=PackedStringArray("4.6", "GL Compatibility")
+
+[autoload]
+
+EditorMenuHandler="*uid://dieyy61k5qfp0"
+EditorAutoload="*uid://cxs7lw84dorro"
+EditorDzHandler="*uid://t3a7bnqr6vko"
+EditorFun="*uid://baafia1a8mp4g"
+Helper="*uid://did2x5ga7gkrm"
+
+[dotnet]
+
+project/assembly_name="vectorier_godot"
+
+[file_customization]
+
+folder_colors={
+"res://Core/": "gray",
+"res://addons/": "gray",
+"res://textures/construction/": "orange",
+"res://textures/downtown/": "blue",
+"res://textures/techpark/": "green",
+"res://user/": "purple",
+"res://user/Helpers/": "teal",
+"res://user/Pack/": "teal",
+"res://user/scenes/": "teal",
+"res://user/textures/": "yellow",
+"res://user/textures/misc/": "yellow"
+}
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

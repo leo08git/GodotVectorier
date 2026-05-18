@@ -1,0 +1,224 @@
+[gd_scene load_steps=9 format=3 uid="uid://cyflr3piu8rlx"]
+
+[ext_resource type="Script" uid="uid://4xnsgdu44mkc" path="res://Root.gd" id="1_ydihv"]
+[ext_resource type="Texture2D" uid="uid://bivxun04am0oy" path="res://textures/Downtown Textures/v_bg.png" id="2_jac1v"]
+[ext_resource type="PackedScene" uid="uid://ca461c1bkr0wq" path="res://Prefabs/Model Spawn.scn" id="4_kl7k0"]
+[ext_resource type="Texture2D" uid="uid://b5gp05bpkj0cm" path="res://textures/misc/v_black.png" id="5_qa5fc"]
+[ext_resource type="Script" uid="uid://1k5fmfdyuqs" path="res://scripts/classes/class_model.gd" id="5_qxixc"]
+[ext_resource type="PackedScene" uid="uid://cnh8sy6nsedn2" path="res://Prefabs/Trigger_template.scn" id="7_2uhpi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jac1v"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.09985284, 0.09985284, 0.09985284, 1)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="GDScript" id="GDScript_2uhpi"]
+script/source = "extends Node
+class_name Vectorier_model_hunter
+
+@export_group(\"Model\")
+@export var model_name = \"Hunter\"
+@export var type = \"0\"
+@export var color = \"0\"
+@export var Birth_spawn = \"DefaultSpawn\"
+@export var AI = 1
+@export var spawn_time = 0.8
+@export var Respawns = \"\" 
+@export var ForceBlasts = \"\" 
+@export var uses_Tricks = true
+@export var uses_Items = true
+@export var triggers_Victory = false
+@export var triggers_Lose = false
+@export var skin = \"hunter\"
+@export var AllowedSpawns = \"Respawn\"
+@export var Murders = \"Player\"
+@export var Arrests = \"Player\"
+@export var show_Icon = true
+var _data = '<Model Name=\"'
+
+func get_model():
+	var data = '<Model Name=\"%s\"' % model_name
+	
+	if type != \"\":
+		data += ' Type=\"%s\"' % type
+	if color != \"\":
+		data += ' Color=\"%s\"' % color
+	if Birth_spawn != \"\":
+		data += ' BirthSpawn=\"%s\"' % Birth_spawn
+
+	data += ' AI=\"%s\"' % str(AI)
+	data += ' Time=\"%s\"' % str(spawn_time)
+
+	if Respawns != \"\":
+		data += ' Respawns=\"%s\"' % Respawns
+	if ForceBlasts != \"\":
+		data += ' ForceBlasts=\"%s\"' % ForceBlasts
+
+	data += ' Trick=\"%s\"' % ( \"1\" if uses_Tricks else \"0\" )
+	data += ' Item=\"%s\"' % ( \"1\" if uses_Items else \"0\" )
+	data += ' Victory=\"%s\"' % ( \"1\" if triggers_Victory else \"0\" )
+	data += ' Lose=\"%s\"' % ( \"1\" if triggers_Lose else \"0\" )
+
+	data += ' Skins=\"%s\"' % skin
+
+	if AllowedSpawns != \"\":
+		data += ' AllowedSpawns=\"%s\"' % AllowedSpawns
+	if Murders != \"\":
+		data += ' Murders=\"%s\"' % Murders
+	if Arrests != \"\":
+		data += ' Arrests=\"%s\"' % Arrests
+	if show_Icon:
+		data += ' Icon=\"1\"'
+	elif not show_Icon:
+		data += ' Icon=\"0\"'
+
+	data += ' />'
+	return data
+"
+
+[node name="Root" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ydihv")
+vector_folder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Vector"
+
+[node name="VBg" type="Sprite2D" parent="." groups=["Background"]]
+texture = ExtResource("2_jac1v")
+
+[node name="level" type="CodeEdit" parent="."]
+visible = false
+z_index = 100
+z_as_relative = false
+layout_mode = 0
+offset_left = 1208.0
+offset_top = 40.0
+offset_right = 2360.0
+offset_bottom = 688.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_jac1v")
+symbol_lookup_on_click = true
+symbol_tooltip_on_hover = true
+line_folding = true
+gutters_draw_line_numbers = true
+gutters_draw_fold_gutter = true
+
+[node name="Camera" type="Camera2D" parent="." groups=["Main"]]
+position = Vector2(1804, 479)
+zoom = Vector2(0.745, 0.745)
+
+[node name="ModelSpawn" parent="." groups=["Main"] instance=ExtResource("4_kl7k0")]
+position = Vector2(553, 645)
+
+[node name="Vectorier_model" type="Node" parent="."]
+script = ExtResource("5_qxixc")
+metadata/_custom_type_script = "uid://1k5fmfdyuqs"
+metadata/MYNEWAAA_colorignore = false
+
+[node name="ModelSpawn2" parent="." groups=["Main"] instance=ExtResource("4_kl7k0")]
+position = Vector2(311, 645)
+spawn_name = "DefaultSpawn"
+
+[node name="VBlack" type="Sprite2D" parent="." groups=["Main", "platform"]]
+position = Vector2(1042, 986)
+scale = Vector2(31.8, 10.12)
+texture = ExtResource("5_qa5fc")
+
+[node name="VBlack2" type="Sprite2D" parent="." groups=["Main", "platform"]]
+position = Vector2(1042, 986)
+scale = Vector2(31.8, 10.12)
+texture = ExtResource("5_qa5fc")
+
+[node name="VBlack3" type="Sprite2D" parent="." groups=["Main", "platform"]]
+position = Vector2(2618, 1184)
+scale = Vector2(18.2, 26.48)
+texture = ExtResource("5_qa5fc")
+
+[node name="VBlack4" type="Sprite2D" parent="." groups=["Main", "platform"]]
+position = Vector2(3920.5, 1039)
+scale = Vector2(20.62, 26.48)
+texture = ExtResource("5_qa5fc")
+
+[node name="VBlack5" type="Sprite2D" parent="." groups=["Main", "platform"]]
+position = Vector2(4909, 339)
+scale = Vector2(20.62, 54.46)
+texture = ExtResource("5_qa5fc")
+
+[node name="VBlack6" type="Sprite2D" parent="." groups=["Main", "platform"]]
+position = Vector2(3636, -435.75)
+scale = Vector2(20.62, 21.53)
+texture = ExtResource("5_qa5fc")
+
+[node name="TriggerTemplate" parent="." groups=["Main"] instance=ExtResource("7_2uhpi")]
+position = Vector2(1644, 542)
+Command = "<Init>
+<SetVariable Name=\"$Active\" Value=\"1\"/>
+<SetVariable Name=\"$Node\" Value=\"COM\"/>
+<SetVariable Name=\"Follow\" Value=\"_$Model\"/>
+<SetVariable Name=\"$AI\" Value=\"0\"/>
+<SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Template Name=\"CameraFollow\"/>"
+
+[node name="TriggerTemplate2" parent="." groups=["Main"] instance=ExtResource("7_2uhpi")]
+position = Vector2(4262, -191)
+Command = "<Init>
+    <SetVariable Name=\"$Active\" Value=\"1\"/>
+    <SetVariable Name=\"$AI\" Value=\"0\" />
+    <SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+
+<Loop>
+ <Events>
+   <Enter/>
+ </Events>
+ <Conditions>
+ </Conditions>
+  <Actions>
+       <Camera Stop=\"1\" />
+  </Actions>
+</Loop>
+
+"
+
+[node name="Vectorier_model_hunter" type="Node" parent="."]
+script = SubResource("GDScript_2uhpi")
+
+[node name="TriggerTemplate3" parent="." instance=ExtResource("7_2uhpi")]
+position = Vector2(2389, 335)
+Command = "<Init>
+<SetVariable Name=\"$Active\" Value=\"1\"/>
+<SetVariable Name=\"$Node\" Value=\"COM\"/>
+<SetVariable Name=\"Follow\" Value=\"_$Model\"/>
+<SetVariable Name=\"$AI\" Value=\"0\"/>
+<SetVariable Name=\"Flag1\" Value=\"0\"/>
+</Init>
+<Template Name=\"CameraFollow\"/>"
+
+[node name="ModelSpawn3" parent="." instance=ExtResource("4_kl7k0")]
+position = Vector2(2014, 174)
+
+[node name="Vector_model" type="Node" parent="."]
+script = ExtResource("5_qxixc")
+attributes = Dictionary[String, Variant]({
+"AI": 2,
+"BirthSpawn": "HelperSpawn",
+"Color": Color(0, 0, 0, 1),
+"LifeTime": 5.0,
+"Name": "Helper",
+"Skins": "helper|shirt|cap",
+"Time": 0.0,
+"Type": "0"
+})
+metadata/_custom_type_script = "uid://1k5fmfdyuqs"

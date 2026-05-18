@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c55sjnhrcmv01"]
+
+[ext_resource type="Script" uid="uid://bwfkpibptj6tg" path="res://user/Helpers/script/model_preview.gd" id="1_0jnsn"]
+[ext_resource type="Texture2D" uid="uid://b5f0nncygs47p" path="res://user/Resource/GameTextures/hunter_3.png" id="1_vofpd"]
+
+[node name="Hunter3" type="Sprite2D" unique_id=686155407]
+texture = ExtResource("1_vofpd")
+script = ExtResource("1_0jnsn")
+metadata/_edit_lock_ = 1
+metadata/qol_excluded = false

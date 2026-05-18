@@ -1,0 +1,91 @@
+This is a log automatically generated after compiling a level to game. (15:05:46)
+Content:
+
+<Root>
+  <Sets>
+  </Sets>
+  <Music Name="music_dinamic" Volume="0.3"/>
+  <Models Choice="AITriggers" Variant="CommonMode">
+  </Models>
+  <Models Choice="AITriggers" Variant="HunterMode">
+  </Models>
+  <Coins Value="40"/>
+  <Track>
+    <Object Factor="0.5">
+      <Content>
+        <Image X="992.0" Y="-912.0" Width="1159.16796875" Height="2318.3359375" ClassName="v_building_3"/>
+        <Image X="2840.0" Y="-1200.0" Width="988.9609375" Height="1977.921875" ClassName="v_building_2"/>
+      </Content>
+    </Object>
+    <Object Factor="1">
+      <Content>
+        <Image X="-91.8399963378906" Y="-733.079956054688" Width="1328.0" Height="91.0" ClassName="Pill (animated)"/>
+        <Platform X="3660.0" Y="-320.0" Width="1076.20971679688" Height="1825.13598632813"/>
+        <Platform X="1860.0" Y="170.0" Width="1807.91455078125" Height="1338.76330566406"/>
+        <Platform X="5280.0" Y="-60.0" Width="6090.486328125" Height="1775.6748046875"/>
+        <Platform X="-510.0" Y="170.0" Width="1939.00158691406" Height="1338.76330566406"/>
+        <Image X="-387.359985351563" Y="168.699996948242" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="-507.359985351563" Y="290.149993896484" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="3184.19995117188" Y="168.699996948242" Width="475.464508056641" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="8252.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="1952.64001464844" Y="20.1499996185303" Width="643.0" Height="150.0" ClassName="ventilation_holes_roof"/>
+        <Image X="-302.0" Y="-207.0" Width="1635.0" Height="385.0" ClassName="partyroof"/>
+        <Image X="-507.359985351563" Y="1110.15002441406" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="6242.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="3772.63989257813" Y="-319.850006103516" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="2372.63989257813" Y="168.699996948242" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="6662.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="2689.53002929688" Y="-98.5599975585938" Width="391.0" Height="256.0" ClassName="v_rail_left"/>
+        <Image X="-507.359985351563" Y="710.149963378906" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="5282.6396484375" Y="1280.15002441406" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="6592.7099609375" Y="-1836.18994140625" Width="2093.1943359375" Height="1360.62377929688" ClassName="v_black"/>
+        <Image X="1302.64001464844" Y="1110.15002441406" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="8172.6396484375" Y="-479.849975585938" Width="795.0" Height="430.0" ClassName="v_office_pattern"/>
+        <Image X="-507.359985351563" Y="168.699996948242" Width="128.0" Height="129.446395874023" ClassName="v_CornerUp_L_02"/>
+        <Image X="1302.64001464844" Y="700.149963378906" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="452.639984130859" Y="168.699996948242" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="1962.64001464844" Y="290.149993896484" Width="1699.70593261719" Height="1232.81274414063" ClassName="v_black"/>
+        <Image X="1302.64001464844" Y="168.389999389648" Width="128.0" Height="129.766403198242" ClassName="v_CornerUp_R_03"/>
+        <Image X="7082.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="4612.64013671875" Y="-319.850006103516" Width="128.0" Height="129.766403198242" ClassName="v_CornerUp_R_03"/>
+        <Image X="5282.6396484375" Y="60.1499977111816" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="6592.7099609375" Y="-570.7099609375" Width="67.0262298583984" Height="216.791870117188" ClassName="v_black"/>
+        <Image X="5282.6396484375" Y="880.149963378906" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="871.929992675781" Y="168.699996948242" Width="437.717681884766" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="1852.64001464844" Y="168.699996948242" Width="128.0" Height="129.446395874023" ClassName="v_CornerUp_L_02"/>
+        <Image X="7209.8798828125" Y="-320.0" Width="182.0" Height="262.937591552734" ClassName="office_door"/>
+        <Image X="7382.6396484375" Y="-479.849975585938" Width="795.0" Height="430.0" ClassName="v_office_pattern"/>
+        <Image X="6592.6396484375" Y="-479.849975585938" Width="795.0" Height="430.0" ClassName="v_office_lightened_piece"/>
+        <Image X="4612.64013671875" Y="1020.14996337891" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="5822.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="2772.63989257813" Y="168.699996948242" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="7492.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="-388.109985351563" Y="290.149993896484" Width="1699.70593261719" Height="1232.81274414063" ClassName="v_black"/>
+        <Image X="3282.63989257813" Y="-389.850006103516" Width="790.0" Height="256.0" ClassName="v_rail_longleft"/>
+        <Image X="7882.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="4549.6298828125" Y="-409.849975585938" Width="200.0" Height="91.0" ClassName="v_fan_1_1"/>
+        <Image X="5282.6396484375" Y="-59.8499984741211" Width="128.0" Height="129.446395874023" ClassName="v_CornerUp_L_02"/>
+        <Image X="3652.63989257813" Y="-319.850006103516" Width="128.0" Height="129.446395874023" ClassName="v_CornerUp_L_02"/>
+        <Image X="4192.64013671875" Y="-319.850006103516" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="5392.6396484375" Y="40.1399993896484" Width="3255.95654296875" Height="1670.58447265625" ClassName="v_black"/>
+        <Image X="3650.39990234375" Y="-218.40998840332" Width="1075.75695800781" Height="1741.34790039063" ClassName="v_black"/>
+        <Image X="32.6399993896484" Y="168.699996948242" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="1852.64001464844" Y="0.1499999910593" Width="127.0" Height="173.0" ClassName="v_venthole_1_1"/>
+        <Image X="7482.6396484375" Y="-190.0" Width="101.0" Height="131.08479309082" ClassName="office_printer"/>
+        <Image X="5402.6396484375" Y="-59.8499984741211" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="4132.64013671875" Y="-439.849975585938" Width="198.0" Height="125.0" ClassName="v_muorny_tank_2_1"/>
+        <Image X="1852.64001464844" Y="1130.15002441406" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="1852.64001464844" Y="710.149963378906" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="1852.64001464844" Y="290.149993896484" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="4612.64013671875" Y="210.149993896484" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="1302.64001464844" Y="290.149993896484" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="5282.6396484375" Y="460.149993896484" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_L_02"/>
+        <Image X="4612.64013671875" Y="630.149963378906" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="4612.64013671875" Y="-199.849990844727" Width="128.0" Height="427.0" ClassName="v_LongCornerUp_R_03"/>
+        <Image X="1972.64001464844" Y="168.699996948242" Width="427.0" Height="129.446395874023" ClassName="v_LongFloor_03"/>
+        <Image X="2572.63989257813" Y="0.1499999910593" Width="127.0" Height="173.0" ClassName="v_venthole_1_1"/>
+        <Image X="4352.64013671875" Y="-409.849975585938" Width="86.0" Height="91.0" ClassName="v_muorny_tank_1_1"/>
+      </Content>
+    </Object>
+  </Track>
+</Root>
