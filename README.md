@@ -7,6 +7,7 @@ Table of contents:
 - [Features](https://github.com/leo08git/GodotVectorier/#Features)
 - [Classes](https://github.com/leo08git/GodotVectorier/#Classes)
 - [Discord server](https://github.com/leo08git/GodotVectorier/#discord-server)
+- [Disclaimer](https://github.com/leo08git/GodotVectorier/#Disclaimer)
 
 # Features:
 - Almost all classes present on Vector level system & needed to create a level.
@@ -37,3 +38,6 @@ It currently has:
 # Discord server
 Please do NOT report any issues from GodotVectorier to the community responsible for the Unity version of Vectorier.
 There is a special discord server to GodotVectorier: https://discord.gg/uGpd4XS9N
+
+# Disclaimer
+The MIT license only applies for MY assets & scripts, ripped textures or sounds remain a property of Nekki.
