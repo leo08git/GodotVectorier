@@ -19,6 +19,7 @@ config/snap_coordinates_to_2_decimals=true
 
 config/name="GodotVectorier"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+config/icon="uid://bjyegpkf3d2n8"
 
 [autoload]
 

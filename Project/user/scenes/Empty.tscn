@@ -4,3 +4,4 @@
 
 [node name="Root" type="Node2D" unique_id=1239310306]
 script = ExtResource("1_jbtjm")
+sets = PackedStringArray("buildings.xml", "buildings_construction.xml", "buildings_downtown.xml", "buildings_lab.xml", "buildings_techpark.xml", "buildings_techpark_bonus.xml", "objects.xml", "objects_construction.xml", "objects_downtown.xml", "objects_lab.xml", "objects_techpark.xml")

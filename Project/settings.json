@@ -2,6 +2,6 @@
 	"game_folder" : "C:/Program Files (x86)/Steam/steamapps/common/Vector" ,
 	"textures_folder" : "res://user/Resource/GameTextures/" ,
 	"objects_folder" : "" ,
-	"open_vector_after_compile" : true ,
+	"open_vector_after_compile" : false ,
 	"snap_coordinates_to_2_decimals" : true
 }
