@@ -4,7 +4,7 @@ class_name ClassTrigger
 const TRIGGER_TEMPLATES = preload("uid://bp7w84ksmuoxw")
 
 ## ZapXML is a interface to make triggers.
-@export_tool_button("Command helper called ZapXML (Github link)" , "TextureRect") var open_xzap = func(): OS.shell_open("https://github.com/leo08git/ZapXML")
+@export_tool_button("Command helper called ZapXML (Github link)" , "TextureRect") var open_xzap = func(): OS.shell_open("https://github.com/leo08git/ZapXML2src")
 @export_multiline var Command = ""
 
 func _get_property_list() -> Array[Dictionary]:

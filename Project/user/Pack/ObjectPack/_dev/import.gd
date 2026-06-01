@@ -3,6 +3,10 @@ extends Node2D
 ## Not important for GodotVectorier usage and can be deleted aswell with the _dev folder. Dont judge my poor coding.
 ## btw this had a LOT of iterations to become what it is, so, you know... appreciate pls :3
 
+const BlacklistedAttributes = [
+	"X", "Y", "Width", "Height", "Height1", "NativeX", "NativeY", "Name"
+]
+
 @export_tool_button("Import") var tb_import = import
 @export_file() var file_path: String
 @export var object_per_frame: int = 15
@@ -47,12 +51,17 @@ func parse_node(node: XMLNode) -> void:
 		if (instance is Node2D):
 			apply_transform_attributes(instance, node)
 
+		for attribute in node.attributes:
+			if not BlacklistedAttributes.has(attribute):
+				instance.attributes[attribute] = node.attributes[attribute]
+
 	elif instance and instance.has_meta("is_object"):
 		instance.remove_meta("is_object")
 		Helper.add_node(instance, self, null if owner_is_tree else self)
 		apply_transform_attributes(instance, node)
 		object = instance
 		objects.append(instance)
+
 
 ## Object that is inside another object
 	elif node.name == "Object" and node.standalone and object:

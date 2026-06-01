@@ -1,87 +1,57 @@
 @tool
 extends Node
+const DZIP_PATH = "res://Core/dependency/dzip.exe"
+const OutputHeader = "[DzHandler] "
+var GlobalDzPath = ProjectSettings.globalize_path(DZIP_PATH.get_base_dir())
 
 signal decompile_process_terminated
 signal compile_process_terminated
 
-## Used to rebuild dzip from scratch when compiling or decompiling
-var current_path: String
-var is_process_running := false
-
-#var decompile_thread: Thread
-#var compile_thread: Thread
-
-## Redirected version of OS.alert so the main window dont get on front of the alert ones
-func dzprint(text: String, error: bool):
-	if error:
-		push_error("[DzHandler] %s" % text)
-	else:
-		print("[DzHandler] %s" % text)
-
-func remove_dzip() -> void:
-	var result = DirAccess.remove_absolute(current_path + "/dzip.exe")
-	if result != OK: dzprint("Unable to delete temporary dzip.exe." , true)
-
-func remove_dcl() -> void:
-	var result = DirAccess.remove_absolute(current_path + "/dc.dcl")
-	if result != OK: dzprint("Unable to delete temporary dc.dcl. (dzip config file)" , true)
-
-const DZIP_PATH = "res://Core/dependency/dzip.exe"
 func dzip_decompile(path_to_file: String , warn := true) -> Error:
 	if not FileAccess.file_exists(path_to_file): 
 		decompile_process_terminated.emit()
-		dzprint("Path doesnt exist." , true)
+		push_error(OutputHeader, "Tried decompiling unexistant path \"%s\"" % path_to_file , true)
 		return ERR_DOES_NOT_EXIST
 
-	current_path = path_to_file.get_base_dir()
-	var path_to_dzip = path_to_file.get_base_dir() + "/dzip.exe"
-## Create a new dzip.exe on the file's folder
-	var dzip = FileAccess.open(path_to_dzip , FileAccess.WRITE)
-	if not dzip: dzprint("An error occured when creating a dzip file on the destination path, error: %s (show this to the developer)" % FileAccess.get_open_error() , true); return Error.ERR_BUG
-
-## Copy original bytes to the new dzip
-	dzip.store_buffer(FileAccess.get_file_as_bytes(DZIP_PATH))
-	dzip.close()
-
 ## Run CMD, then cd to the file path folder, then run dzip to decompile the folder
-	var result = OS.execute_with_pipe("cmd.exe" , ["/C" , "cd %s&&dzip -d %s" % [path_to_file.get_base_dir() , path_to_file.get_file()]] , false)
+	var args = ["/C" , "cd \"%s\"&&dzip -d \"%s\"" % [GlobalDzPath , path_to_file]]
+	var result = OS.execute_with_pipe("cmd.exe" , args , false)
 
-	is_process_running = true
-	if result.is_empty(): dzprint("Something went wrong while decompiling %s" % path_to_file.get_file() , true); is_process_running = false; return FAILED
+	if result.is_empty(): push_error(OutputHeader, "Could not create dzip process to decompile \"%s\"." % path_to_file , true); return FAILED
+	var stderr: FileAccess = result["stderr"]
 
 ## Create a thread to watch the CMD process to check when it's completed
 	var decompile_thread = Thread.new()
 	var threadcheck = decompile_thread.start(watch_thread.bind(result["pid"] , 
 		func(): 
-			decompile_process_terminated.emit()
-			remove_dzip()
 			decompile_thread.wait_to_finish()
-			if warn: dzprint("The dz file has been decompiled." , false) , 
-		func(): 
-			decompile_process_terminated.emit()
-			remove_dzip()
+			if warn: print(OutputHeader, "The dz file has been decompiled.")
+			decompile_process_terminated.emit.call_deferred() ,
+		func(exit_code: int): 
 			decompile_thread.wait_to_finish()
-			dzprint("An error occured while decompiling" , true)
+			push_error(OutputHeader, "An error occured while decompiling \"%s\". exit code: %s" % [path_to_file, exit_code])
+			print(" - - - - - - - - - - - - Debug since the process failed.")
+			print(OutputHeader, "Arguments: ", args)
+			print(OutputHeader, "The following lines that start with \"DzipReport: \" are 25 lines from the dzip cmd process itself. Empty lines will be ignored.")
+			for i in 25:
+				var line = stderr.get_line()
+				if !line.is_empty():
+					print("DzipReport line %d: " % i, line)
+			print(" - - - - - - - - - - - - Debug since the process failed.")
+			decompile_process_terminated.emit.call_deferred()
 ))
 	if threadcheck != OK: return FAILED
 	return OK
 
 func dzip_compile(path_to_folder: String , warn := true) -> Error:
 	if not DirAccess.dir_exists_absolute(path_to_folder): 
-		compile_process_terminated.emit()
-		dzprint("Path doesn't exist." , true)
+		compile_process_terminated.emit.call_deferred()
+		push_error(OutputHeader, "Path doesn't exist." , true)
 		return ERR_DOES_NOT_EXIST
 
-	current_path = path_to_folder.get_base_dir()
-	var path_to_dzip = path_to_folder.get_base_dir() + "/dzip.exe"
-## Create a new dzip.exe on the file's folder
-	var dzip = FileAccess.open(path_to_dzip , FileAccess.WRITE)
-## Copy original bytes to the new dzip
-	dzip.store_buffer(FileAccess.get_file_as_bytes(DZIP_PATH))
-	dzip.close()
-
-## Setup config  for dzip
-	var configdcl = FileAccess.open(path_to_folder.get_base_dir() + "/dc.dcl" , FileAccess.WRITE)
+## Setup config for dzip
+	var dcl_path = path_to_folder.get_base_dir() + "/dc.dcl"
+	var configdcl = FileAccess.open(dcl_path , FileAccess.WRITE)
 	var config: String = 'archive "%s"\nbasedir "%s"' % [path_to_folder.get_basename() + ".dz" , path_to_folder]
 
 ## Setup all the files on config dcl and close it
@@ -92,29 +62,37 @@ func dzip_compile(path_to_folder: String , warn := true) -> Error:
 	configdcl.close()
 
 ## Run dzip on configdcl
-	var args = ["/C" , 'cd %s&&dzip dc.dcl' % path_to_folder.get_base_dir()]
+	var args = ["/C" , 'cd \"%s\"&&dzip \"%s\"' % [GlobalDzPath , dcl_path]]
 	var result = OS.execute_with_pipe("cmd.exe" , args , true)
 
-	is_process_running = true
-	if result.is_empty(): dzprint("Something went wrong while running CMD" , true); return FAILED
+	if result.is_empty(): push_error(OutputHeader, "Wasn't able to run windows CMD to create DZIP process."); return FAILED
+	var stderr: FileAccess = result["stderr"]
 
 ## Watch the cmd (read the decompile one for more details)
 	var compile_thread = Thread.new()
 	var threadcheck = compile_thread.start(watch_thread.bind(result["pid"] , 
 		func(): # success
-			remove_dzip()
-			remove_dcl()
+			var DclRemoveResult = DirAccess.remove_absolute(dcl_path)
+			if DclRemoveResult != OK: push_error(OutputHeader, "Unable to delete temporary dc.dcl. Error \"%s\". (dzip config file)" % DclRemoveResult)
 			compile_thread.wait_to_finish()
 			if warn: 
-				dzprint("The dz file has been compiled." , false) 
-			compile_process_terminated.emit()
+				print(OutputHeader, "The dz file has been compiled.") 
+			compile_process_terminated.emit.call_deferred()
 , 
-		func(): # failed
-			remove_dzip()
-			remove_dcl()
+		func(exit_code: int): # failed
+			var DclRemoveResult = DirAccess.remove_absolute(dcl_path)
+			if DclRemoveResult != OK: push_error(OutputHeader, "Unable to delete temporary dc.dcl. (dzip config file)")
 			compile_thread.wait_to_finish()
-			dzprint("An error occured while compiling" , true)
-			compile_process_terminated.emit()
+			push_error(OutputHeader, "An unknown error occured while compiling \"%s\". exit code: %s (Thread called fail)" % [path_to_folder , exit_code])
+			print(" - - - - - - - - - - - - Debug since the process failed.")
+			print(OutputHeader, "Arguments: ", args)
+			print(OutputHeader, "The following lines that start with \"DzipReport: \" are 25 lines from the dzip cmd process itself. Empty lines will be ignored.")
+			for i in 25:
+				var line = stderr.get_line()
+				if !line.is_empty():
+					print("DzipReport line %d: " % i, line)
+			print(" - - - - - - - - - - - - Debug since the process failed.")
+			compile_process_terminated.emit.call_deferred()
 ))
 
 # debug
@@ -129,14 +107,12 @@ func dzip_compile(path_to_folder: String , warn := true) -> Error:
 
 func watch_thread(pid: int , callback: Callable , error_fallback: Callable) -> void:
 	while OS.is_process_running(pid):
-		OS.delay_msec(5)
-
-## These only run after the "while" loop is false, which is when CMD stops running
-## Checks if cmd failed somehow (if it fails, take the L, because i won't know how to fix!)
-	if OS.get_process_exit_code(pid) != 0: 
-		error_fallback.call_deferred(); set_deferred("is_process_running" , false); return
-## Function to run outside of the thread cuz it crahses if we dont
-	callback.call_deferred(); set_deferred("is_process_running" , false)
+		OS.delay_msec(50)
+	var exit_code = OS.get_process_exit_code(pid)
+	if exit_code != 0: 
+		error_fallback.call_deferred(exit_code) 
+		return
+	callback.call_deferred()
 
 func dzip_execute() -> void:
 	var dzip_action = EditorAutoload.level.dzip_action

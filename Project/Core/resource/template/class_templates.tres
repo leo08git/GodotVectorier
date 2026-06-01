@@ -6,24 +6,26 @@
 [ext_resource type="Script" uid="uid://cyjvkka35b16s" path="res://Core/scripts/classes/SpriteBased/class_platform.gd" id="4_0ocox"]
 [ext_resource type="Script" uid="uid://c4ag38qtr1hm7" path="res://Core/scripts/classes/SpriteBased/class_trigger.gd" id="5_3pkwg"]
 [ext_resource type="Script" uid="uid://dddqw0fkkdcox" path="res://Core/scripts/classes/SpaceBased/class_camera.gd" id="6_0ocox"]
-[ext_resource type="Script" uid="uid://blhlo6lga6f4o" path="res://Core/scripts/classes/SpaceBased/class_spawn_location.gd" id="7_6y22i"]
+[ext_resource type="Script" uid="uid://blhlo6lga6f4o" path="res://Core/scripts/classes/SpaceBased/class_model_spawn.gd" id="7_6y22i"]
 [ext_resource type="Script" uid="uid://1k5fmfdyuqs" path="res://Core/scripts/classes/Abstract/class_model.gd" id="8_jsx7k"]
 [ext_resource type="Script" uid="uid://cw6cqdpsiwp1e" path="res://Core/scripts/classes/SpriteBased/class_trapezoid.gd" id="9_7xhnn"]
 [ext_resource type="Script" uid="uid://dfmffnsktrk7y" path="res://Core/scripts/classes/SpaceBased/class_transform.gd" id="11_wmbla"]
 [ext_resource type="Script" uid="uid://dp3ommpi8c2jl" path="res://Core/scripts/classes/SpaceBased/class_object.gd" id="12_3kcqb"]
+[ext_resource type="Script" uid="uid://bqceui7yj7wyd" path="res://Core/scripts/classes/Extendable/class_base.gd" id="12_s1ryy"]
 
 [resource]
 script = ExtResource("1_ysvdb")
 templates = Dictionary[String, GDScript]({
 "Area": ExtResource("2_jm7eh"),
-"Camera": ExtResource("6_0ocox"),
+"Base": ExtResource("12_s1ryy"),
+"Camera start point": ExtResource("6_0ocox"),
+"Collision": ExtResource("4_0ocox"),
 "Image": ExtResource("3_3pkwg"),
 "Model": ExtResource("8_jsx7k"),
-"Model Spawn location": ExtResource("7_6y22i"),
+"Model Spawn point": ExtResource("7_6y22i"),
+"Movable": ExtResource("11_wmbla"),
 "Object (Container)": ExtResource("12_3kcqb"),
-"Platform": ExtResource("4_0ocox"),
 "Slope": ExtResource("9_7xhnn"),
-"Transform": ExtResource("11_wmbla"),
 "Trigger": ExtResource("5_3pkwg")
 })
 metadata/_custom_type_script = "uid://l0l0wyp887bd"

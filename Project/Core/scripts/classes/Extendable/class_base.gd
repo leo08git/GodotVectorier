@@ -1,7 +1,6 @@
 @tool
 extends Node
 ## Base class for all GodotVectorier classes.
-
 class_name ClassBase
 
 @export_tool_button("Preview attributes") var tb_pa = func(): 
@@ -11,16 +10,27 @@ class_name ClassBase
 
 ## If this class should be included in export
 @export var enabled := true
-
 ## XML attributes, any entry here will override the required attributes created on the [method get_xml_node] function.
-@export var attributes: Dictionary
+@export var attributes: Dictionary = {}:
+	set(value):
+		if attributes == value: return
+		var previous_dictionary: Dictionary = attributes.duplicate()
+		attributes = value
 
+		for attribute in previous_dictionary:
+			var previous = previous_dictionary.get(attribute)
+			var new = attributes[attribute]
+
+			if previous != new: 
+				_attribute_changed(attribute, new)
 
 func _change_class_request(new_class: String) -> void:
 	var CLASS_TEMPLATES = load("uid://bbi7jlswl1wji")
 	if !CLASS_TEMPLATES.templates.has(new_class): return
 	var script: GDScript = CLASS_TEMPLATES.templates[new_class]
 	set_script(script)
+	_ClassInitiate()
+
 	if new_class == "Trapezoid": (self as ClassTrapezoid)._type_changed.call_deferred()
 
 ## Used when compiling a level, creates different required attributes entries depending on the class.
@@ -50,4 +60,11 @@ func _set(property: StringName, value: Variant) -> bool:
 	if property == "Change class":
 		_change_class_request(value)
 		return true
+
 	return false
+
+func _attribute_changed(attribute: StringName, new_value: Variant) -> void:
+	pass
+
+func _ClassInitiate() -> void:
+	pass

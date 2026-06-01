@@ -36,6 +36,9 @@ func _ready() -> void:
 
 var cooldown: float = 0.0
 func _physics_process(delta: float) -> void:
+	if not EditorInterface.get_selection().get_selected_nodes().has(self): return
+	preview_panel.visible = processing
+	preview_panel.rotation = 0
 	if (cooldown >= 0.0): cooldown -= delta
 	if processing:
 		preview_panel.global_position = template_donttouch.get_global_mouse_position()

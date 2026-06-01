@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://cnddrg2ma08bp"]
+
+[ext_resource type="Texture2D" uid="uid://dmh6oy2mdm152" path="res://user/Resource/GameTextures/concrete_1.jpg" id="1_7lrym"]
+[ext_resource type="Script" uid="uid://b8ywmahn8mr4h" path="res://Core/scripts/classes/SpriteBased/class_image.gd" id="2_8geme"]
+
+[node name="5LayoutTips" type="Node2D" unique_id=1836728289]
+
+[node name="Manual" type="Node2D" parent="." unique_id=944738922]
+
+[node name="Concrete1" type="Sprite2D" parent="Manual" unique_id=1440740846]
+scale = Vector2(0.27442557, 0.27442557)
+texture = ExtResource("1_7lrym")
+script = ExtResource("2_8geme")
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Concrete2" type="Sprite2D" parent="Manual" unique_id=897242979]
+position = Vector2(260, 0)
+scale = Vector2(0.27442557, 0.27442557)
+texture = ExtResource("1_7lrym")
+script = ExtResource("2_8geme")
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="Concrete3" type="Sprite2D" parent="Manual" unique_id=1395913259]
+position = Vector2(-260, 0)
+scale = Vector2(0.27442557, 0.27442557)
+texture = ExtResource("1_7lrym")
+script = ExtResource("2_8geme")
+presets = "Select..."
+"Change class" = "Classes..."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1863827752]
+offset_left = -390.00006
+offset_top = 210.0
+offset_right = 2468.0
+offset_bottom = 1160.0
+scale = Vector2(0.274, 0.274)
+theme_override_constants/separation = 0
+
+[node name="concrete_1_rect2" type="TextureRect" parent="HBoxContainer" unique_id=1305439816]
+layout_mode = 2
+texture = ExtResource("1_7lrym")
+
+[node name="concrete_1_rect3" type="TextureRect" parent="HBoxContainer" unique_id=1837030036]
+layout_mode = 2
+texture = ExtResource("1_7lrym")
+
+[node name="concrete_1_rect" type="TextureRect" parent="HBoxContainer" unique_id=84667301]
+layout_mode = 2
+texture = ExtResource("1_7lrym")
+
+[node name="1" type="Label" parent="." unique_id=1918142435]
+offset_left = -367.00003
+offset_top = -175.0
+offset_right = 384.99997
+offset_bottom = -152.0
+scale = Vector2(0.42072803, 0.42072803)
+theme_override_font_sizes/font_size = 38
+text = "Let's say you want to stack a bunch of images on the side of eachother, you could do it manually:"
+horizontal_alignment = 1
+
+[node name="2" type="Label" parent="." unique_id=450539424]
+offset_left = -367.00003
+offset_top = 144.0
+offset_right = 1406.0
+offset_bottom = 253.0
+scale = Vector2(0.42072803, 0.42072803)
+theme_override_font_sizes/font_size = 38
+text = "OR, another way you could do it is by using Godot's built in Control nodes, like a HBoxContainer!
+It's easier, faster and a lot handy!"
+horizontal_alignment = 1
+
+[node name="3" type="Label" parent="." unique_id=1751142064]
+offset_left = -311.0
+offset_top = 475.99997
+offset_right = 1462.0
+offset_bottom = 529.0
+scale = Vector2(0.35406125, 0.35406125)
+theme_override_font_sizes/font_size = 38
+text = "(Search about Godot's Control Nodes in YouTube if you don't know what they are.)"
+horizontal_alignment = 1
+
+[node name="4" type="Label" parent="." unique_id=783747458]
+offset_left = -311.0
+offset_top = 493.0
+offset_right = 1462.0
+offset_bottom = 546.0
+scale = Vector2(0.35406125, 0.35406125)
+theme_override_font_sizes/font_size = 38
+text = "(You must convert your images to TextureRect's in order for it to work properly.)"
+horizontal_alignment = 1

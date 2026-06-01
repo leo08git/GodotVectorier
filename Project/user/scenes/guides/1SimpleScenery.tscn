@@ -1,27 +1,17 @@
 [gd_scene format=3 uid="uid://8iqwejcmcn8w"]
 
 [ext_resource type="Script" uid="uid://4xnsgdu44mkc" path="res://Core/scripts/main.gd" id="1_vecv3"]
-[ext_resource type="Texture2D" uid="uid://dyhi2p7t87qbg" path="res://user/Resource/GameTextures/cons_bg50.png" id="2_a45ba"]
 [ext_resource type="Script" uid="uid://b8ywmahn8mr4h" path="res://Core/scripts/classes/SpriteBased/class_image.gd" id="3_bf51a"]
-[ext_resource type="Texture2D" uid="uid://b5ubeugutwix3" path="res://user/Resource/GameTextures/cons_sacks.png" id="4_2oywh"]
-[ext_resource type="Texture2D" uid="uid://g66r0x8oeq4r" path="res://user/Resource/GameTextures/cons_prop.png" id="5_cr7ed"]
-[ext_resource type="Texture2D" uid="uid://ckhamuufbt2vf" path="res://user/Resource/GameTextures/cons_mixer.png" id="6_ju7xe"]
-[ext_resource type="Texture2D" uid="uid://iek2ufoc2cqk" path="res://user/Resource/GameTextures/cons_container.jpg" id="7_nb3y6"]
-[ext_resource type="Texture2D" uid="uid://dga84naif17ai" path="res://user/Resource/GameTextures/cons_budkus.png" id="8_gq383"]
-[ext_resource type="Texture2D" uid="uid://ciy8nedn0nlg8" path="res://user/Resource/GameTextures/v_black.png" id="9_uu0um"]
+[ext_resource type="Texture2D" uid="uid://bpfj4r47yqkl2" path="res://user/Resource/GameTextures/cons_sacks.png" id="4_2oywh"]
+[ext_resource type="Texture2D" uid="uid://cc5omyiagrvo0" path="res://user/Resource/GameTextures/cons_prop.png" id="5_cr7ed"]
+[ext_resource type="Texture2D" uid="uid://0vckfxpjx4nn" path="res://user/Resource/GameTextures/cons_mixer.png" id="6_ju7xe"]
+[ext_resource type="Texture2D" uid="uid://ck5lj0u6orj74" path="res://user/Resource/GameTextures/cons_container.jpg" id="7_nb3y6"]
+[ext_resource type="Texture2D" uid="uid://cgkp6c35wngdu" path="res://user/Resource/GameTextures/cons_budkus.png" id="8_gq383"]
+[ext_resource type="Texture2D" uid="uid://cwqe4kfa55rjh" path="res://user/Resource/GameTextures/v_black.png" id="9_uu0um"]
 
 [node name="1SimpleScenery" type="Node2D" unique_id=195640071]
 script = ExtResource("1_vecv3")
 metadata/_custom_type_script = "uid://4xnsgdu44mkc"
-
-[node name="ConsBg50" type="Sprite2D" parent="." unique_id=693549730]
-texture = ExtResource("2_a45ba")
-centered = false
-script = ExtResource("3_bf51a")
-factor = 0.05
-presets = "Select..."
-"Change class" = "Classes..."
-metadata/_editor_processed = 1
 
 [node name="ConsSacks" type="Sprite2D" parent="." unique_id=1251650761]
 position = Vector2(-106, 157)

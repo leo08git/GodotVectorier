@@ -35,238 +35,8 @@ const class_templates = {
 	"Trigger" : preload("uid://dmv353gwwqb3w") ,
 	"Trapezoid" : preload("uid://dtan3crq3cr7h") ,
 	"Spawn" : preload("uid://bjgujtyj283bv") ,
-	"Area" : preload("uid://dddq4utkauy12")
-}
-
-## Looks inside a dz, when created it automatically decompiles the dz.
-class DzSeeker:
-	var dz_path: String = ""
-	var decompiled_directory: String = ""
-	var state: Error = OK
-
-## Decompiles the dz right away. Usage: DzSeeker.new("level_xml")
-	func _init(dz_name: String, backup: bool = true) -> void:
-		dz_name += ".dz"
-		if Helper.get_setting("game_folder").is_empty(): 
-			printerr("[DzSeeker] The game path folder is not set. Cancelling operation")
-			state = ERR_BUG
-			return
-		elif not DirAccess.dir_exists_absolute(Helper.get_setting("game_folder")): 
-			printerr("[DzSeeker] The game path folder is invalid! Cancelling operation")
-			state = ERR_BUG
-			return
-
-		dz_path = Helper.get_setting("game_folder").path_join(dz_name)
-		decompiled_directory = dz_path.get_basename()
-		var pre_decompiled: bool = DirAccess.dir_exists_absolute(decompiled_directory)
-
-		if pre_decompiled:
-			pass
-		else:
-			if backup:
-				var copy_path: String = dz_path.get_basename() + "_backup.dz"
-				DirAccess.copy_absolute(dz_path, copy_path)
-			EditorDzHandler.dzip_decompile(dz_path)
-			await EditorDzHandler.decompile_process_terminated
-
-	## Returns the absolute path for a file present in the dz.
-	func get_file(filename: String) -> String:
-		return decompiled_directory.path_join(filename)
-
-	func compile() -> bool:
-		if EditorDzHandler.dzip_compile(decompiled_directory) != OK: return false
-		await EditorDzHandler.compile_process_terminated
-		return true
-class VectorLevel:
-	var factors: Array[float] = []
-	var objects: Array[ClassBase] = []
-	var models: Array[ClassModel] = []
-
-	var max_coins: int = 40
-	var music_name: String = "music_dinamic"
-	var music_volume: float = 0.2
-	var sets: Dictionary[String, String] = {}
-
-	func _init(root: LevelRoot) -> void:
-		if is_instance_valid(root):
-			max_coins = root.max_coins
-			music_name = root.music_name
-			music_volume = root.music_volume
-			sets = root.sets
-			_parse_objects(Helper.get_all_children(EditorAutoload.level))
-
-	func _parse_objects(list: Array) -> void:
-		for object in list:
-			if object is not ClassBase: 
-				if Helper.get_setting("report_level_issues"):
-					push_warning('Ignoring %s because it is not a recognized object.' % object.name)
-				continue
-
-			objects.append(object)
-			if object is ClassImage or object is ClassFactor:
-				if factors.has(object.factor): continue
-				factors.append(object.factor)
-
-
-	func get_string() -> String:
-		factors.sort()
-		var node_root := XMLNode.new("Root")
-		var node_sets := XMLNode.new("Sets")
-		var node_music := XMLNode.new("Music" , {"Name":music_name, "Volume": music_volume} , true)
-		var node_models_common_mode := XMLNode.new("Models" , {"Choice":"AITriggers", "Variant":"CommonMode"})
-		var node_models_hunter_mode := XMLNode.new("Models" , {"Choice":"AITriggers", "Variant":"HunterMode"})
-		var node_max_coins_value := XMLNode.new("Coins" , {"Value":max_coins} , true)
-		var node_track := XMLNode.new("Track")
-		var factor_nodes: Dictionary[float, XMLNode] = {}
-
-		for _set_ in sets:
-			var set_node := XMLNode.new(_set_, {"FileName":sets[_set_]})
-			set_node.standalone = true
-			node_sets.children.append(set_node)
-
-		for factor in factors:
-			@warning_ignore("incompatible_ternary")
-			var factor_node := XMLNode.new("Object" , {"Factor":factor if fmod(factor, 1) != 0 else int(factor)})
-			var factor_content := XMLNode.new("Content")
-			factor_nodes[factor] = factor_content
-
-			factor_node.children.append(factor_content)
-			node_track.children.append(factor_node)
-
-		var last_childholder: ClassChildContainer = null
-		var last_childholder_xmlnode: XMLNode = null
-
-		for object in objects:
-			if not object.enabled: continue
-			var object_xmlnode = Helper.instance_to_xml(object)
-			if not is_instance_valid(object_xmlnode): continue
-
-			if object_xmlnode.attributes.has("Color") and object_xmlnode.attributes.Color is Color:
-				object_xmlnode.attributes.Color = "#%s" % (object_xmlnode.attributes.Color as Color).to_html(0)
-
-			if object is ClassChildContainer:
-				last_childholder = object
-				var content = XMLNode.new("Content")
-				object_xmlnode.children.append(content)
-				last_childholder_xmlnode = content
-
-			if object is ClassModel:
-				match object.mode:
-					object.modes.COMMON_MODE:
-						node_models_common_mode.children.append(object_xmlnode)
-					object.modes.HUNTER_MODE:
-						node_models_hunter_mode.children.append(object_xmlnode)
-
-			elif is_instance_valid(last_childholder) and is_instance_valid(object) and last_childholder.is_ancestor_of(object):
-				last_childholder_xmlnode.children.append(object_xmlnode)
-
-			elif object is ClassImage or object is ClassFactor: 
-				factor_nodes.get_or_add(object.factor , XMLNode.new()).children.append(object_xmlnode)
-
-		node_root.children.append_array([
-			node_sets ,
-			node_music ,
-			node_models_common_mode ,
-			node_models_hunter_mode ,
-			node_max_coins_value ,
-			node_track])
-
-		return node_root.dump_str(true)
-class LevelHandler:
-	static func compile_map(root: LevelRoot, copy_content: bool, save_to_game: bool) -> void:
-## Validating
-		if root.get_children().is_empty(): printerr("No objects present. Cancelling operation"); return
-		print_rich("[color=orange]Compile map process started...")
-
-## Get all objects, create a vector level class and parse them objects
-		var vectorlevel = Helper.VectorLevel.new(root)
-		print_rich("[color=green]Parsed level")
-
-## info
-		var xml: String = vectorlevel.get_string()
-		var include_thumbnail: bool = false if EditorAutoload.level.level_thumbnail_path.is_empty() else true
-		var include_title: bool = false if EditorAutoload.level.level_name.is_empty() else true
-		if copy_content: DisplayServer.clipboard_set(xml)
-		if not save_to_game: 
-			print_rich("[color=orange]Operation finished yaaaay")
-			return
-
-		var dzseeker: DzSeeker = await DzSeeker.new("level_xml")
-		if dzseeker.state != OK: 
-			printerr("Error while seeking level_xml.dz.")
-			return
-		var map_file_name = root.override_this_level + ".xml"
-		var map_file_path = dzseeker.get_file(map_file_name)
-		print_rich("[i][color=lightblue]Informations:\n	level dz path: %s\n	map file path: %s" % [
-			dzseeker.dz_path ,
-			map_file_path])
-
-## save xml to file
-		print_rich("[color=lightyellow]Opening file path %s." % map_file_path)
-		var f = FileAccess.open(map_file_path , FileAccess.WRITE)
-		if FileAccess.get_open_error() != OK: printerr("Unable to open path %s, error %d." % [map_file_path, FileAccess.get_open_error()]); return
-
-		print_rich("[color=lightyellow]Storing XML...")
-		var store_result = f.store_string(xml)
-		if not store_result: # results false if we couldnt store it for some reason.
-			printerr("Unable to store xml on file %s. Error: %s" % [map_file_path, str(f.get_error())])
-			f.close()
-			return
-		f.close()
-
-## compile dz file
-		print_rich("[color=green]Opened and stored content in the XML file, now compiling. [color=yellow](May take a while on the first time.)")
-		if not await (dzseeker.compile()): printerr("Couldn't compile the dz."); return
-		print_rich("[color=green]Compiled")
-
-## Handle thumbnail if needed
-		if include_thumbnail and EditorAutoload.level.level_thumbnail_path != EditorAutoload.level._processed_thumbnail_path:
-			if not FileAccess.file_exists(EditorAutoload.level.level_thumbnail_path):
-				printerr("Level thumbnail path is invalid."); return
-			print_rich("\n[color=yellow]Processing thumbnail change... Opening GUI_2048_1536.dz")
-			var thumbnail_seeker: DzSeeker = await DzSeeker.new("GUI_2048_1536")
-			if thumbnail_seeker.state != OK: printerr("Couldn't create a DZseeker for thumbnail processing."); return
-			var thumbnail_filename: String =  "%s.png" % EditorAutoload.level.override_this_level
-			var override_path: String = thumbnail_seeker.get_file(thumbnail_filename)
-			print_rich("[color=green]Opened, overriding image")
-			if DirAccess.copy_absolute(EditorAutoload.level.level_thumbnail_path, override_path) != OK: 
-				printerr("Unable to copy from \"%s\" to \"%s\", Cancelling operation." % [EditorAutoload.level.level_thumbnail_path, override_path]); return
-			print_rich("[color=yellow]Now compiling...")
-			if not await thumbnail_seeker.compile(): printerr("Couldn't compile thumbnail."); return
-			print_rich("[color=green]Compiled thumbnail. [GUI_2048_1536]")
-			EditorAutoload.level._processed_thumbnail_path = EditorAutoload.level.level_thumbnail_path
-
-## Handle title if needed
-		if include_title and EditorAutoload.level.level_name != EditorAutoload.level._processed_level_name:
-			print_rich("\n[color=yellow]Processing title... Opening common_xml.dz")
-			var title_seeker: DzSeeker = await DzSeeker.new("common_xml")
-			if title_seeker.state != OK: printerr("Couldn't create a DZseeker for title processing."); return
-			var localization_path: String = title_seeker.get_file("localization_all.xml")
-			var xml_key: String = "item_%s" % EditorAutoload.level.override_this_level
-			print_rich("[color=green]Opened, initializing XMLNode and altering language keys...")
-
-			var xml_root: XMLNode = XML.parse_file(localization_path).root
-			var xml_title_holder: XMLNode = xml_root.find_child(xml_key)
-			for lang_key in LocalizationAttributeKeys:
-				xml_title_holder.attributes.set(lang_key, EditorAutoload.level.level_name)
-
-			print_rich("[color=yellow]Saving")
-			FileAccess.open(localization_path, FileAccess.WRITE).store_string(xml_root.dump_str(1))
-
-			print_rich("[color=green]Saved! [color=yellow]Now compiling...")
-			if not await title_seeker.compile(): printerr("Couldn't compile title."); return
-			print_rich("[color=green]Compiled title. [common_xml]")
-			EditorAutoload.level._processed_level_name = EditorAutoload.level.level_name
-
-		print_rich("\n[color=orange]Successfully compiled the level :D")
-		var logpath = Helper.get_setting("log_map_path") as String
-		if not logpath.is_empty(): 
-			print_rich("[color=yellow]Created log file!")
-			FileAccess.open(logpath, FileAccess.WRITE).store_string("This is a log automatically generated after compiling a level to game. (%s)\nContent:\n\n%s" % [Time.get_time_string_from_system() ,xml])
-
-		var b = Helper.get_setting("open_vector_after_compile")
-		if (b is bool and b == true):
-			OS.shell_open("steam://rungameid/248970")
+	"Area" : preload("uid://dddq4utkauy12")}
+const SettingsPath := "res://settings.json"
 
 ## Recursive children get
 func get_all_children(root: Node) -> Array[Node]:
@@ -277,16 +47,7 @@ func get_all_children(root: Node) -> Array[Node]:
 			nodes.append_array(get_all_children(node))
 	return nodes
 
-func find_local_file(filename: StringName, default: StringName = "") -> String:
-	var paths: PackedStringArray = []
-	seek_files(get_setting("textures_folder"), paths, filename.get_extension())
-  
-	for path in paths:
-		if path.get_file() == filename:
-			return path
-	return default
-
-## Seeks files in a path, appends to [b]current_result[/b]. if local is true, use res:// format.
+## Seeks files in a path, appends to [b]current_result[/b]. 
 func seek_files(path: String, current_result: PackedStringArray, filter: StringName) -> void:
 	var dir = DirAccess.open(path)
 
@@ -329,12 +90,13 @@ func get_all_files_relative(folder: String , relative_path = "", extension_filte
 	return array
 
 ## Adds a node to the tree and set its owner (editor-adapted), if owner_ is null then set it to the editor tree.
-func add_node(node: Node, parent: Node, owner_: Node = null, undo_allow: bool = false) -> void:
+func add_node(node: Node, parent: Node = null, owner_: Node = null, undo_allow: bool = false) -> void:
+	parent = EditorInterface.get_edited_scene_root() if (parent == null) else parent
 	parent.add_child(node)
 	node.owner = EditorInterface.get_edited_scene_root() if (owner_ == null) else owner_
 
 	if undo_allow:
-		EditorInterface.get_editor_undo_redo().create_action("Create platform on image")
+		EditorInterface.get_editor_undo_redo().create_action("Add node to editor")
 		EditorInterface.get_editor_undo_redo().add_undo_method(node, "queue_free")
 		EditorInterface.get_editor_undo_redo().commit_action()
 
@@ -369,7 +131,7 @@ func xml_to_instance(node: XMLNode, debug: bool = false) -> Node:
 	match node.name:
 		"Image":
 			instance.name = node.attributes["ClassName"]
-			instance.texture = ResourceLoader.load(find_file_extension(Helper.get_setting("textures_folder").path_join(node.attributes["ClassName"]), [".png", ".jpg", ".jpeg"]))
+			instance.texture = ResourceLoader.load(find_file_extension(get_setting("textures_folder").path_join(node.attributes["ClassName"]), [".png", ".jpg", ".jpeg"]))
 			if not node.children.is_empty():
 				var _matrix: XMLNode = node.find_child("Matrix")
 				var _dimensions: Vector2 = instance.get("texture").get_size() * instance.get("scale")
@@ -385,15 +147,10 @@ func xml_to_instance(node: XMLNode, debug: bool = false) -> Node:
 			if node.has_child("Content"): 
 				instance.Command = node.Content.dump_str(true,0,2,false)
 		"Spawn":
-			(instance as ClassSpawnLocation).spawn_animation = node.attributes["Animation"]
-			(instance as ClassSpawnLocation).spawn_id = node.attributes["Name"]
+			(instance as ClassModelSpawn).spawn_animation = node.attributes["Animation"]
+			(instance as ClassModelSpawn).spawn_id = node.attributes["Name"]
 
 	return instance
-
-## Parse an [ClassBase] to [XMLNode] if possible. [i](Will return null if instance is not a [ClassBase])
-func instance_to_xml(instance: Node) -> XMLNode:
-	if instance is ClassBase: return instance.get_xml_node()
-	return null
 
 ## Creates a [PackedScene] from a node and returns it. if bruteforce_owner_children is true, set the owner of every child to said node before packing (expensive.)
 func node_to_scene(node: Node, bruteforce_owner_children: bool = false) -> PackedScene:
@@ -407,7 +164,11 @@ func node_to_scene(node: Node, bruteforce_owner_children: bool = false) -> Packe
 
 ## Short version of ProjectSettings.get_setting
 func get_setting(setting: String) -> Variant:
-	return ProjectSettings.get_setting(EditorMenuHandler.SETTINGS_CONFIG_HEADER.path_join(setting))
+	var result = JSON.parse_string(FileAccess.get_file_as_string(SettingsPath))
+	if result == null: push_error("[GenericHelper] Tried getting setting \"%s\" but the settings JSON file content is invalid." % setting)
+	else: EditorAutoload.settings = result
+
+	return EditorAutoload.settings.get(setting)
 
 func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Vector2:
 	var q0 := p0.lerp(p1, t)
@@ -418,7 +179,7 @@ func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Vector
 ## Find a object's ancestor container (NOT really efficient but yk)
 func find_ancestor_container(child: Node) -> Node2D:
 	if child == null: return null
-	if child.get_parent() is LevelRoot or child.get_parent() is ClassChildContainer:
+	if child.get_parent() is LevelRoot or child.get_parent() is ClassContainer:
 		return child.get_parent()
 	else:
 		return find_ancestor_container(child.get_parent())
@@ -429,6 +190,15 @@ func get_class_position(node: ClassBase) -> Vector2:
 	var container_ancestor = find_ancestor_container(node)
 	var result: Vector2 = container_ancestor.to_local(node.global_position).snappedf(0.01 if get_setting("snap_coordinates_to_2_decimals") else 0.0)
 	return result
+
+
+func get_class_dimensions(node: ClassBase) -> Vector2:
+	if node.get_class() == "Sprite2D":
+		return node.scale * node.texture.get_size()
+	elif node.get_class() == "TextureRect":
+		var rect = node.get_global_rect()
+		return Vector2(rect.size.x, rect.size.y)
+	return Vector2()
 
 func get_viewport_camera_pos() -> Vector2:
 	return EditorInterface.get_editor_viewport_2d().global_canvas_transform.origin
@@ -496,7 +266,7 @@ func evaluate_gameobject_vectorier_script(object: UnityGameObject) -> Dictionary
 		{
 					"script" : preload("uid://cyjvkka35b16s") , # Platform
 					"tag" : "Platform" ,
-					"tag_properties" : {}
+					"tag_properties" : {} 
 		} ,
 
 		{
@@ -508,7 +278,7 @@ func evaluate_gameobject_vectorier_script(object: UnityGameObject) -> Dictionary
 
 		{
 					"script" : preload("uid://b0w1m0eeyay8k") , # Area
-					"tag" : ["Area"] ,
+					"tag" : "Area" ,
 					"tag_properties" : {} ,
 					"tag_auto_param_pass" : {"area_name":"m_Name"}
 		} ,
@@ -520,7 +290,7 @@ func evaluate_gameobject_vectorier_script(object: UnityGameObject) -> Dictionary
 	var target_script: GDScript = null
 
 	for option: Dictionary in TagOptions:
-		if (option.tag is Array and option.tag.has(tag)) or (option.tag is String and option.tag == tag):
+		if ((option.tag is Array) and option.tag.has(tag)) or ((option.tag is String) and option.tag == tag):
 			target_script = option.script
 
 			if option.tag is Array:
@@ -532,12 +302,35 @@ func evaluate_gameobject_vectorier_script(object: UnityGameObject) -> Dictionary
 
 			break
 
-	for pass_property in tag_auto_param_pass:
-		var pass_value: Variant = tag_auto_param_pass[pass_property]
-		tag_properties[pass_property] = pass_value
+	if target_script == null:
+		push_warning("[Helper while predicting a Unity scene GameObject] Couldn't find a class match for object \"%s\" with tag \"%s\", defaulting to ClassBase." % [object.data.get("m_Name", &""), tag])
+		target_script = preload("uid://bqceui7yj7wyd")
 
 	return {
 		"script":target_script, 
 		"tag_properties": tag_properties ,
 		"tag_auto_properties" : tag_auto_param_pass
 		}
+
+func is_vector_running() -> bool:
+	var output := []
+	OS.execute("tasklist", [], output)
+
+	return "Vector.exe" in str(output)
+
+func tree_to_xml(root: Node) -> Array[XMLNode]:
+	var dict: Dictionary[XMLNode, Node] = {}
+	var result: Array[XMLNode] = []
+
+	for child in root.get_children():
+		if (child is ClassBase):
+			var xml = child.get_xml_node()
+			if not xml: continue
+			dict[xml] = child
+
+	for xml in dict:
+		var node = dict[xml]
+		xml.children.append_array(tree_to_xml(node))
+		result.append(xml)
+
+	return result

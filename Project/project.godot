@@ -15,10 +15,6 @@ config/log_map_path="res://Core/last_built_level.xml"
 config/textures_folder="res://user/Resource/GameTextures/"
 config/snap_coordinates_to_2_decimals=true
 
-[animation]
-
-compatibility/default_parent_skeleton_in_mesh_instance_3d=true
-
 [application]
 
 config/name="GodotVectorier"
@@ -26,7 +22,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [autoload]
 
-EditorMenuHandler="*uid://dieyy61k5qfp0"
+GlobalEditorPlugin="*uid://c4irmptrgr8nb"
 EditorAutoload="*uid://cxs7lw84dorro"
 EditorDzHandler="*uid://t3a7bnqr6vko"
 EditorFun="*uid://baafia1a8mp4g"
@@ -45,9 +41,11 @@ folder_colors={
 "res://textures/downtown/": "blue",
 "res://textures/techpark/": "green",
 "res://user/": "purple",
-"res://user/Helpers/": "teal",
+"res://user/Helpers/": "blue",
 "res://user/Pack/": "teal",
-"res://user/scenes/": "teal",
+"res://user/Prefabs/": "orange",
+"res://user/Resource/": "teal",
+"res://user/Scenes/": "blue",
 "res://user/textures/": "yellow",
 "res://user/textures/misc/": "yellow"
 }

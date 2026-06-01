@@ -94,12 +94,12 @@ func dump_str(
 
 func _to_string():
 	return "<XMLNode name=%s attributes=%s content=%s cdata=%s standalone=%s children=%s>" % [
-		self.name,
-		"{...}" if len(self.attributes) > 0 else "{}",
-		'"..."' if len(self.content) > 0 else '""',
-		"[...]" if len(self.cdata) > 0 else "[]",
-		self.standalone,
-		"[...]" if len(self.children) > 0 else "[]"
+		name ,
+		attributes ,
+		content ,
+		cdata ,
+		standalone ,
+		children
 	]
 
 
@@ -241,3 +241,18 @@ func has_child(Name: String) -> bool:
 		if c.name == Name:
 			return true
 	return false
+
+## E.g: [code]XMLNode.from_tree("level/content")[/code] = 2 XMLNodes, content being a child of level. Returns the first child
+static func from_tree(tree: String) -> XMLNode:
+	var xmls: Array[XMLNode] = []
+	for slice in tree.split("/"):
+		var newxml = XMLNode.new(slice)
+		if xmls.size() > 0: 
+			xmls[xmls.size() - 1].children.append(newxml)
+		xmls.append(newxml)
+
+	return xmls[0]
+
+## Alias to children.append
+func append(child: XMLNode) -> void:
+	children.append(child)

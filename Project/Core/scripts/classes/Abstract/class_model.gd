@@ -1,34 +1,29 @@
 @tool
-## A class to represent an ingame level model, does nothing on its own besides adding a model to the XML. See [ClassSpawn]
-
 extends ClassBase
+## A class to represent an ingame level model, does nothing on its own besides adding a model to the XML. See [ClassModelSpawn]
 class_name ClassModel
-enum presets {PLAYER , HUNTER , HELPER , REVOLUTION_GIRL}
-enum modes {
-	HUNTER_MODE, ## Only shows up in hunter mode when playing this level 
-	COMMON_MODE ## Only shows up in classic mode when playing this level
-}
+
+## Any changes made to the "BirthSpawn" attribute will update this spawn point
+@export var LinkedSpawnPoint: ClassModelSpawn:
+	set(value):
+		LinkedSpawnPoint = value
+		if value and attributes.has("BirthSpawn"):
+			value.spawn_id = attributes.get("BirthSpawn")
+## If enabled, this model only spawns when playing on hunter mode.
+@export var HunterMode: bool = false
 
 var presets_dic = {
-	presets.PLAYER : {"Name" = "Player" ,"Type" = 1 ,"Color" = Color.BLACK ,"BirthSpawn" = "PlayerSpawn" ,"AI" = 0 ,"Time" = 0.0 } ,
-	presets.HUNTER : {"Name" = "Hunter" ,"Type" = 0 ,"Color" = Color.BLACK ,"BirthSpawn" = "HunterSpawn" ,"AI" = 1 ,"Time" = 0.1 , "Skins" = "Hunter" , "Murders"= "Player|Helper" , "Arrests"="Player"  , "Icon"= 1 } ,
-	presets.HELPER : {"Name"="Helper" , "Type"="0" , "Color"=Color.BLACK , "BirthSpawn"="HelperSpawn" , "AI"=2 , "Time"=0.0 , "Skins"="helper|shirt|cap" , "LifeTime"=5.0} ,
-	presets.REVOLUTION_GIRL : {"Name"="RevolutionGirl" , "Type"=0 , "Color"=Color.BLACK ,  "BirthSpawn"="RevolutionGirlSpawn" ,  "Time"=0.0 ,  "AI"=3 , "Skins"="revolution_girl"}
+	"Player" : {"Name" = "Player" ,"Type" = 1 ,"Color" = Color.BLACK ,"BirthSpawn" = "PlayerSpawn" ,"AI" = 0 ,"Time" = 0.0, "Trick" = "1", "Item" = "1", "Victory" = "1", "Lose" = "1"} ,
+	"Hunter" : {"Name" = "Hunter" ,"Type" = 0 ,"Color" = Color.BLACK ,"BirthSpawn" = "HunterSpawn" ,"AI" = 1 ,"Time" = 0.1 , "Skins" = "Hunter" , "Murders"= "Player|Helper" , "Arrests"="Player"  , "Icon"= 1 } ,
+	"Helper" : {"Name"="Helper" , "Type"="0" , "Color"=Color.BLACK , "BirthSpawn"="HelperSpawn" , "AI"=2 , "Time"=0.0 , "Skins"="helper|shirt|cap" , "LifeTime"=5.0} ,
+	"Revolution Girl" : {"Name"="RevolutionGirl" , "Type"=0 , "Color"=Color.BLACK ,  "BirthSpawn"="RevolutionGirlSpawn" ,  "Time"=0.0 ,  "AI"=3 , "Skins"="revolution_girl"}
 }
 
-## What mode this model should be present in when exporting
-@export var mode := modes.COMMON_MODE
-
-## Preset buttons
-@export_tool_button("Load player preset" , "CharacterBody2D") var load_player_preset = func(): _load_preset(presets.PLAYER)
-@export_tool_button("Load hunter preset" , "CharacterBody2D") var load_hunter_preset = func(): _load_preset(presets.HUNTER)
-@export_tool_button("Load helper preset" , "CharacterBody2D") var load_helper_preset = func(): _load_preset(presets.HELPER)
-@export_tool_button("Load revolution girl preset" , "CharacterBody2D") var load_revgirl_preset = func(): _load_preset(presets.REVOLUTION_GIRL)
-
-func _load_preset(preset: presets) -> void:
-	var preset_dic: Dictionary = presets_dic[preset]
+func _load_preset(preset: String) -> void:
+	if not presets_dic.has(preset): return
+	var preset_dic: Dictionary = presets_dic[preset].duplicate()
 	attributes = preset_dic
-	property_list_changed.emit.call_deferred()
+	call_deferred("notify_property_list_changed")
 
 func get_xml_node() -> XMLNode:
 	var required_attrs = {"Name" : "UnnamedModel" , "Type" : 0 , "Color" : "0"}
@@ -38,3 +33,26 @@ func get_xml_node() -> XMLNode:
 		node.attributes.Color = "0" if Color().is_equal_approx(required_attrs.Color) else "#%s" % str((node.attributes.Color as Color).to_html(false))
 
 	return node
+
+func _get_property_list() -> Array[Dictionary]:
+	return [{
+		"name" : "Load preset" ,
+		"type" : TYPE_STRING ,
+		"hint" : PROPERTY_HINT_ENUM ,
+		"hint_string" : ",".join(presets_dic.keys())
+	}]
+
+func _set(property: StringName, value: Variant) -> bool:
+	if property == "Load preset":
+		_load_preset(value)
+		return true
+	return false
+
+func _get(property: StringName) -> Variant:
+	if property == "Load preset":
+		return "Presets..."
+	return null
+
+func _attribute_changed(attribute: StringName, new_value: Variant) -> void:
+	if attribute == "BirthSpawn" and is_instance_valid(LinkedSpawnPoint):
+		LinkedSpawnPoint.spawn_id = new_value

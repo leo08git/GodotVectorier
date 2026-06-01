@@ -9,7 +9,7 @@ class_name UnitySceneLoader
 @export_global_file("*.prefab", "*.unity") var scene_path: String = ""
 ## Path to get all guids that are needed. [br]
 ## Guids are the IDs unity use to load resources, without them you wouldn't be able to import textures or prefabs. [br]
-## My recommendation is scanning your Assets/ folder to make sure everything will work as expected.
+## My recommendation is scanning your Assets/Resources folder to make sure everything will work as expected.
 @export_global_dir var guids_path: String = ""
 ## Force parsing even if we already parsed guids_path.
 @export var force_guid_parse: bool = false

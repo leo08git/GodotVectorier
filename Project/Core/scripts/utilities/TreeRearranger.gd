@@ -7,7 +7,7 @@ class_name TreeRearrange
 @export var tree: Node
 ## Where sort parents will go, if empty, uses [member tree] instead.
 @export var sort_destination: Node
-## If true, gets not only direct children but the entirety of the tree.
+## If on, gets not only direct children but the entirety of the tree.
 @export var recursive_picking: bool = false
 
 @export_group("Sorting")
@@ -52,13 +52,18 @@ func sort() -> void:
 	for target in sort_targets:
 		if target == self: continue
 		if target.is_ancestor_of(self): continue
+		if not target.is_part_of_edited_scene(): 
+			push_warning("Skipping target %s"); continue
+
 		var target_parent: Node = null
 
 		for filter_parameter in definition_filters:
 			if not target.name.match(filter_parameter): continue
 			target_parent = definition_nodes[filter_parameter]
 
+		var _tname = target.name
 		if target_parent: target.reparent(target_parent)
+		target.name = _tname
 
 		index += 1
 		if index > max_operations_per_frame:

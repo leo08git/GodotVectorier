@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b6yk7b1idstho"]
+
+[ext_resource type="Script" uid="uid://dddqw0fkkdcox" path="res://Core/scripts/classes/SpaceBased/class_camera.gd" id="1_5xpf2"]
+
+[node name="Camera" type="Camera2D" unique_id=942271084]
+zoom = Vector2(0.545, 0.545)
+script = ExtResource("1_5xpf2")
+presets = "Select..."
+"Change class" = "Classes..."

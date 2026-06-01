@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://bjra88gmjqhy"]
 
 [ext_resource type="Script" uid="uid://4xnsgdu44mkc" path="res://Core/scripts/main.gd" id="1_rk4vi"]
-[ext_resource type="Texture2D" uid="uid://cy2wu6fk1jcc3" path="res://user/Resource/GameTextures/v_building_3.png" id="2_advj7"]
-[ext_resource type="Texture2D" uid="uid://c20ivjbk4d1we" path="res://user/Resource/GameTextures/v_antenna.png" id="2_m0qik"]
+[ext_resource type="Texture2D" uid="uid://btoble3mygi1t" path="res://user/Resource/GameTextures/v_building_3.png" id="2_advj7"]
+[ext_resource type="Texture2D" uid="uid://bg7op6up74e76" path="res://user/Resource/GameTextures/v_antenna.png" id="2_m0qik"]
 [ext_resource type="Script" uid="uid://b8ywmahn8mr4h" path="res://Core/scripts/classes/SpriteBased/class_image.gd" id="3_advj7"]
-[ext_resource type="Texture2D" uid="uid://b5f0nncygs47p" path="res://user/Resource/GameTextures/hunter_3.png" id="4_5fwc5"]
-[ext_resource type="Texture2D" uid="uid://qdetiovjoc5k" path="res://user/Resource/GameTextures/v_building_2.png" id="4_advj7"]
-[ext_resource type="Script" uid="uid://blhlo6lga6f4o" path="res://Core/scripts/classes/SpaceBased/class_spawn_location.gd" id="5_itjh1"]
+[ext_resource type="Texture2D" uid="uid://cwxhitix8gl6a" path="res://user/Resource/GameTextures/hunter_3.png" id="4_5fwc5"]
+[ext_resource type="Texture2D" uid="uid://443qw105u4ak" path="res://user/Resource/GameTextures/v_building_2.png" id="4_advj7"]
+[ext_resource type="Script" uid="uid://blhlo6lga6f4o" path="res://Core/scripts/classes/SpaceBased/class_model_spawn.gd" id="5_itjh1"]
 [ext_resource type="Script" uid="uid://1k5fmfdyuqs" path="res://Core/scripts/classes/Abstract/class_model.gd" id="6_klnvk"]
-[ext_resource type="Texture2D" uid="uid://ciy8nedn0nlg8" path="res://user/Resource/GameTextures/v_black.png" id="7_fxiji"]
+[ext_resource type="Texture2D" uid="uid://cwqe4kfa55rjh" path="res://user/Resource/GameTextures/v_black.png" id="7_fxiji"]
 [ext_resource type="PackedScene" uid="uid://cwal0qfn1frnq" path="res://Core/dependency/instances/Platform.scn" id="8_nk2e1"]
 [ext_resource type="Texture2D" uid="uid://ddqcndkrmbxyi" path="res://Core/resource/texture/trigger_default_texture.tres" id="9_5fwc5"]
 [ext_resource type="Script" uid="uid://c4ag38qtr1hm7" path="res://Core/scripts/classes/SpriteBased/class_trigger.gd" id="10_itjh1"]
@@ -59,6 +59,7 @@ metadata/_editor_processed = 1
 
 [node name="Player_model" type="Node" parent="Player" unique_id=1490612723]
 script = ExtResource("6_klnvk")
+"Load preset" = "Presets..."
 attributes = {
 &"AI": 0,
 &"BirthSpawn": &"Player",
@@ -106,14 +107,14 @@ bbcode_enabled = true
 text = "Now to one of the most important level aspects, the decoration!
 We obviously use the image class for it, but you can mess with the factors!
 
-Factors are what simulate the z-depth of the image
-So, for example, this building to my left <- 
+Factors are what simulate the depth of the image
+[color=green]<-[/color] This building to my left, for example, 
 thats supposed to be FAR, so we
 Change its factor to the backdrop factor (0.5)
 By clicking on it and choosing from the dropdown box
 
 Now you do it!
-Select the building to my right ->
+Select the building to my right [color=green]->[/color]
 And set its factor to backdrop, then export!
 [font_size=50][i]As of release 1, there's no factor previewing."
 fit_content = true
@@ -133,4 +134,3 @@ metadata/_editor_processed = 1
 
 [node name="Platform" parent="VBlack" unique_id=767417449 instance=ExtResource("8_nk2e1")]
 scale = Vector2(1.5625, 1.5625)
-"Change class" = "Classes..."

@@ -5,7 +5,7 @@ extends ClassObject
 
 class_name ClassTransform
 
-@export_tool_button("Preview move") var tb_preview = preview
+@export_tool_button("Preview move") var tb_preview = transform_preview
 @export_tool_button("Cancel preview") var tb_cancelpreview = cancel_preview
 @export var transform_name: String
 @export var move_intervals: Array[TransformMoveInterval]
@@ -55,7 +55,7 @@ func cancel_preview() -> void:
 		previewing = false
 		cancel_preview_requested = true
 
-func preview() -> void:
+func transform_preview() -> void: 
 	if quick_interval_mode: printerr("Disable quick interval mode to preview."); return
 	start_transform = get("transform")
 	if previewing:
@@ -120,3 +120,6 @@ func get_xml_node() -> XMLNode:
 		interval_idx += 1
 
 	return parent_node
+
+func _physics_process(delta: float) -> void:
+	pass

@@ -1,4 +1,39 @@
 <Root>
+  <Sets>
+	<Library FileName="common.swf"/>
+	<Library FileName="glass.swf"/>
+	<Library FileName="birds.swf"/>
+	<Library FileName="papers.swf"/>
+  </Sets>
+  <Objects>
+	<Object Name="TestDoor" Label="Model">
+	  <Content>
+		<Trigger Name="TriggerDoor" X="60" Y="0" Width="50" Height="300">
+		  <Content>
+			<Init>
+			  <SetVariable Name="$Active" Value="1"/>
+			  <SetVariable Name="$AI" Value="-1"/>
+			  <SetVariable Name="Sound" Value="door_close"/>
+			  <SetVariable Name="AnimName" Value="awd"/>
+			  <SetVariable Name="AnimFrame" Value="18"/>
+			  <SetVariable Name="$Node" Value="COM"/>
+				<SetVariable Name="Flag1" Value="0"/>
+			</Init>
+			<Loop>
+			  <Events>
+				<EventBlock Template="ModelAnimation.Only"/>
+				<EventBlock Template="CommonLib.ActiveDeath"/>
+			  </Events>
+			  <Actions>
+				<ActionBlock Template="ModelAnimation.Only"/>
+				<ActionBlock Template="CommonLib.Sound"/>
+			  </Actions>
+			</Loop>
+		  </Content>
+		</Trigger>
+		<Model X="100" Y="-100" Type="1" ClassName="hunter"/>
+	  </Content>
+	</Object>
 	<Object Name="RunIndicator" Label="Indicators">
 	  <Content>
 		<Image X="0" Y="0" ClassName="run_indicator" Type="3" Width="300" Height="150"/>
@@ -631,7 +666,6 @@
 	  </Content>
 	</Object>
 	<Object Name="Booth1_deep">
-
 	  <Content>
 		<Image X="148" Y="-3" Width="150" Height="150" ClassName="v_Floor_01"/>
 		<Image X="-4" Y="5" Width="150" Height="150" ClassName="v_Wall_01"/>
@@ -6396,6 +6430,5 @@
 		</Trigger>
 	  </Content>
 	</Object>
-
-
+  </Objects>
 </Root>
