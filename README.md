@@ -47,4 +47,4 @@ There is a special discord server to GodotVectorier: https://discord.gg/uGpd4XS9
 - ColorDynamic, RotationDynamic classes
 
 # Disclaimer
-The MIT license only applies for MY assets & scripts, ripped textures or sounds remain a property of Nekki.
+The MIT license only applies for the source code assets and scripts, ripped game resources are property of Nekki.
