@@ -1,11 +1,12 @@
 # GodotVectorier
 GodotVectorier is a level editor made in Godot Editor for the 2D parkour game "Vector".
+<img width="1440" height="860" alt="imagem" src="https://github.com/user-attachments/assets/3a96c442-3629-4d6c-8bac-5e2876d3157f" />
+<img width="1178" height="691" alt="imagem" src="https://github.com/user-attachments/assets/3daf398f-769c-4bbb-b06f-65e1129c6cdc" />
 
 Table of contents:
 - [Features](https://github.com/leo08git/GodotVectorier/#Features)
+- [Classes](https://github.com/leo08git/GodotVectorier/#Classes)
 
-<img width="1440" height="860" alt="imagem" src="https://github.com/user-attachments/assets/3a96c442-3629-4d6c-8bac-5e2876d3157f" />
-<img width="1178" height="691" alt="imagem" src="https://github.com/user-attachments/assets/3daf398f-769c-4bbb-b06f-65e1129c6cdc" />
 
 # Features:
 - Almost all classes present on Vector level system & needed to create a level.
@@ -33,3 +34,5 @@ It currently has:
 - Models
 - Spawn point to models
 
+# Discord server
+Please do NOT report any issues in GodotVectorier to the Unity 
