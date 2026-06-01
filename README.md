@@ -53,4 +53,6 @@ The MIT license only applies for the source code assets and scripts, ripped game
 # How to install?
 1. Download [Godot 4.6.1](https://godotengine.org/download/archive/4.6.1-stable/)
 2. Import project.godot into Godot
+   
 Then you can proceed! =D
+
