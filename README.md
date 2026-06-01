@@ -55,5 +55,4 @@ The MIT license only applies for the source code assets and scripts, ripped game
 2. Import project.godot into Godot
 3. Set your vector game folder at **settings.json**
 
-Then you can proceed! =D
-
+Then you can proceed, consider reading the wiki at the top of this GitHub page!
