@@ -1,5 +1,6 @@
 # GodotVectorier
 GodotVectorier is a level editor made in Godot Editor for the 2D parkour game "Vector".
+([Godot 4.6.1](https://godotengine.org/download/archive/4.6.1-stable/))
 
 Table of contents:
 - [Features](https://github.com/leo08git/GodotVectorier/#features)
