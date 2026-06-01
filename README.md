@@ -35,5 +35,5 @@ It currently has:
 - Spawn point to models
 
 # Discord server
-Please do NOT report any issues in GodotVectorier to the Unity version of Vectorier.
+Please do NOT report any issues in GodotVectorier to the community responsible for the Unity version of Vectorier.
 There is a special discord server to it: https://discord.gg/uGpd4XS9N
