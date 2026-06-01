@@ -39,7 +39,9 @@ It currently has:
 Please do NOT report any issues from GodotVectorier to the community responsible for the Unity version of Vectorier.
 There is a special discord server to GodotVectorier: https://discord.gg/uGpd4XS9N
 
-
+# Todo
+- Trick prefabs (Visualizers)
+- ColorDynamic, RotationDynamic classes
 
 # Disclaimer
 The MIT license only applies for MY assets & scripts, ripped textures or sounds remain a property of Nekki.
