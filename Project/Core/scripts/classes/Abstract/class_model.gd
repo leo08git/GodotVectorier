@@ -9,8 +9,6 @@ class_name ClassModel
 		LinkedSpawnPoint = value
 		if value and attributes.has("BirthSpawn"):
 			value.spawn_id = attributes.get("BirthSpawn")
-## If enabled, this model only spawns when playing on hunter mode.
-@export var HunterMode: bool = false
 
 var presets_dic = {
 	"Player" : {"Name" = "Player" ,"Type" = 1 ,"Color" = Color.BLACK ,"BirthSpawn" = "PlayerSpawn" ,"AI" = 0 ,"Time" = 0.0, "Trick" = "1", "Item" = "1", "Victory" = "1", "Lose" = "1"} ,

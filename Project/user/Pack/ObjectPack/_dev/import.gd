@@ -12,6 +12,7 @@ const BlacklistedAttributes = [
 @export var object_per_frame: int = 15
 ## debugonly
 @export var owner_is_tree: bool = false
+@export_dir var other_objects_path: String
 
 var object: Node2D = null
 var requested_objects: Array[Dictionary] = []
@@ -73,10 +74,19 @@ func parse_node(node: XMLNode) -> void:
 		return
 
 func pos_parse() -> void:
+	var other_objects_paths: PackedStringArray = []
+	Helper.seek_files(other_objects_path, other_objects_paths, &"scn")
+
 	var find_object = func(n: String) -> Node2D: 
 		for i in objects: 
 			if i.name == n:
 				return i
+		for candidate in other_objects_paths:
+			if (candidate.get_file().trim_suffix(".scn")) == n:
+				var instance = load(candidate).instantiate()
+				Helper.add_node(instance, self, null if owner_is_tree else self)
+				instance.set_meta("fscene", 1)
+				return instance
 		return null
 
 	if not requested_objects.is_empty():
@@ -84,8 +94,7 @@ func pos_parse() -> void:
 			var obj_ins: Node2D = find_object.call(request["target"])
 			var requester: Node = request["requester"]
 			var xml: XMLNode = request["xml"]
-			for child in Helper.get_all_children(obj_ins):
-				child.owner = obj_ins # bruteforc
+
 			var dupli = obj_ins.duplicate()
 			Helper.add_node(dupli, requester, requester)
 			apply_transform_attributes(dupli, xml)
@@ -95,16 +104,10 @@ func pos_parse() -> void:
 				parsed_index = 0
 				await get_tree().process_frame
 
-			parsed_index += 1
-			if parsed_index > object_per_frame:
-				parsed_index = 0
-				await get_tree().process_frame
-
 	for obj in objects:
 		var scn: PackedScene = Helper.node_to_scene(obj, true)
-		ResourceSaver.save(scn, "res://user/Pack/ObjectPack/Objects/%s.scn" % obj.name)
+		ResourceSaver.save(scn, "res://user/Pack/ObjectPack/ObjectsConstruction/%s.scn" % obj.name)
 		obj.queue_free()
-		#Helper.add_node(scn.instantiate(), self)
 
 		parsed_index += 1
 		if parsed_index > object_per_frame:

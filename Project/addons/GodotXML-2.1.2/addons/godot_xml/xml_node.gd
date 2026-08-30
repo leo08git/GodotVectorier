@@ -221,6 +221,14 @@ func _init(init_name: String = "", init_attributes: Dictionary = {} , init_self_
 	attributes = init_attributes
 	standalone = init_self_enclose
 
+func get_child_or_add(_name: String, _attributes = {}, _self_enclose = false) -> XMLNode:
+	for child in children:
+		if child.name == _name:
+			return child
+	var new = XMLNode.new(_name, _attributes, _self_enclose)
+	children.append(new)
+	return new
+
 func get_all_children() -> Array[XMLNode]:
 	var a = [] as Array[XMLNode]
 

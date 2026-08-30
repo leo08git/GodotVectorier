@@ -31,4 +31,4 @@ func import():
 	scene.guid_handler = guid_handler
 	await scene.read(scene_path)
 
-	Helper.process_unity_scene(scene, root)
+	#Helper.process_unity_scene(scene, root)

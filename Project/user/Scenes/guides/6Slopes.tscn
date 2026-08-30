@@ -1,0 +1,110 @@
+[gd_scene format=3 uid="uid://dt5o068kj3jtu"]
+
+[ext_resource type="Script" uid="uid://4xnsgdu44mkc" path="res://Core/scripts/main.gd" id="1_idutf"]
+[ext_resource type="PackedScene" uid="uid://c2ewop7a17f0l" path="res://user/Pack/ObjectPack/Objects/Max/MaxPlatform1110x400.scn" id="2_tum5c"]
+[ext_resource type="Script" uid="uid://bqceui7yj7wyd" path="res://Core/scripts/classes/Extendable/class_base.gd" id="3_s8t07"]
+[ext_resource type="PackedScene" uid="uid://b6es560u237oo" path="res://user/Prefabs/SlopeCollision.scn" id="4_s8t07"]
+[ext_resource type="Texture2D" uid="uid://bl54kalrgtts8" path="res://user/Resource/GameTextures/hunter_3.png" id="5_ul4lr"]
+[ext_resource type="Script" uid="uid://blhlo6lga6f4o" path="res://Core/scripts/classes/SpaceBased/class_model_spawn.gd" id="6_5dryk"]
+[ext_resource type="Texture2D" uid="uid://b38p4s4lmnm5g" path="res://user/Resource/GameTextures/v_slope_L.png" id="7_2e1s4"]
+[ext_resource type="Script" uid="uid://b8ywmahn8mr4h" path="res://Core/scripts/classes/SpriteBased/class_image.gd" id="8_ja8vn"]
+[ext_resource type="PackedScene" uid="uid://b6yk7b1idstho" path="res://user/Prefabs/Camera.tscn" id="9_ja8vn"]
+[ext_resource type="Script" uid="uid://1k5fmfdyuqs" path="res://Core/scripts/classes/Abstract/class_model.gd" id="9_yfl5t"]
+
+[node name="6Slopes" type="Node2D" unique_id=1966667235]
+script = ExtResource("1_idutf")
+level_name = "6Slopes"
+sets = PackedStringArray("buildings.xml", "buildings_construction.xml", "buildings_downtown.xml", "buildings_lab.xml", "buildings_techpark.xml", "buildings_techpark_bonus.xml", "objects.xml", "objects_construction.xml", "objects_downtown.xml", "objects_lab.xml", "objects_techpark.xml")
+metadata/_custom_type_script = "uid://4xnsgdu44mkc"
+
+[node name="GuideLabel" type="Label" parent="." unique_id=1338479442]
+offset_left = -1393.0
+offset_top = -717.0
+offset_right = -252.0
+offset_bottom = -275.0
+scale = Vector2(0.6423063, 0.6423063)
+theme_override_font_sizes/font_size = 62
+text = "Hey! to create slopes
+you can grab either a premade one at 
+\"user>Pack>ObjectPack>Objects\"
+Or create your own
+\"user>prefabs>SlopeCollision.scn\"
+(You can drag and drop it here!)"
+horizontal_alignment = 1
+metadata/_editor_processed = 1
+
+[node name="SlopeCollision" parent="." unique_id=887092860 instance=ExtResource("4_s8t07")]
+position = Vector2(-1000, 4)
+script = ExtResource("3_s8t07")
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="VSlopeL" type="Sprite2D" parent="SlopeCollision" unique_id=2070829596]
+show_behind_parent = true
+position = Vector2(6.1035156e-05, -500)
+scale = Vector2(3.9062498, 3.9062498)
+texture = ExtResource("7_2e1s4")
+centered = false
+script = ExtResource("8_ja8vn")
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Platforms" type="Node" parent="." unique_id=700220007]
+metadata/_editor_processed = 1
+
+[node name="MaxPlatform1110x400" parent="Platforms" unique_id=2117162261 instance=ExtResource("2_tum5c")]
+position = Vector2(-2098, 0)
+script = ExtResource("3_s8t07")
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="MaxPlatform1110x401" parent="Platforms" unique_id=1939603479 instance=ExtResource("2_tum5c")]
+position = Vector2(-1000, 0)
+script = ExtResource("3_s8t07")
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="MaxPlatform1110x402" parent="Platforms" unique_id=957492105 instance=ExtResource("2_tum5c")]
+position = Vector2(0, -496)
+scale = Vector2(2.2498493, 2.2498493)
+script = ExtResource("3_s8t07")
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Omitted" type="Node" parent="." unique_id=1049911321]
+metadata/_editor_processed = 1
+
+[node name="Camera" parent="Omitted" unique_id=942271084 instance=ExtResource("9_ja8vn")]
+visible = false
+position = Vector2(-729, -385)
+metadata/_editor_processed = 1
+
+[node name="Player" type="Sprite2D" parent="Omitted" unique_id=512001919]
+position = Vector2(-1739, -108)
+texture = ExtResource("5_ul4lr")
+centered = false
+offset = Vector2(0, -85)
+script = ExtResource("6_5dryk")
+spawn_id = "Player"
+presets = "Select..."
+"Change class" = "Classes..."
+metadata/_editor_processed = 1
+
+[node name="Player_model" type="Node" parent="Omitted/Player" unique_id=1357327176 node_paths=PackedStringArray("LinkedSpawnPoint")]
+script = ExtResource("9_yfl5t")
+LinkedSpawnPoint = NodePath("..")
+"Load preset" = "Presets..."
+attributes = {
+&"AI": 0,
+&"BirthSpawn": &"Player",
+&"Color": Color(0, 0, 0, 1),
+&"Item": "1",
+&"Lose": "1",
+&"Name": "Player",
+&"Time": 0.0,
+&"Trick": "1",
+&"Type": 1,
+&"Victory": "1"
+}
+"Change class" = "Classes..."

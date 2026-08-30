@@ -1,7 +1,7 @@
 @tool
 extends EditorPlugin
 var PreContextMenuMousePosition: Vector2
-enum GlobalContextMenuContent {ToClass}
+enum GlobalContextMenuContent {ToClass, CopyLevelToClipboard, Compile}
 
 class ContextMenuClass2D:
 	extends EditorContextMenuPlugin
@@ -55,3 +55,9 @@ func _global_context_menu_callback(data: Array, id: GlobalContextMenuContent) ->
 			for node in selection:
 				if node.get_script() != null and !Input.is_key_pressed(KEY_SHIFT): push_warning("[GlobalEditorPlugin] Node %s already has a attached script, ignoring. (hold Shift and try again to force.)" % node.name); continue
 				node.set_script(preload("uid://bqceui7yj7wyd"))
+
+		GlobalContextMenuContent.Compile:
+			EditorAutoload.level.toolbutton_compilelevel.call()
+
+		GlobalContextMenuContent.CopyLevelToClipboard:
+			EditorAutoload.level.toolbutton_toclipboard.call()

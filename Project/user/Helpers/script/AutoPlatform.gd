@@ -1,6 +1,6 @@
 @tool
 extends Sprite2D
-class_name AutoPlatform
+class_name UserHelperAutoPlatform
 
 const TextureSegmentSize: float = 128
 const segmentsXMargin: float = 2.5
@@ -13,9 +13,6 @@ const SegmentsOffset: int = 2
 		if !value: return
 		build()
 
-## When compiling a level, autoplatforms that weren't built will be built and then deleted if said autoplatform has this setting off - Perfomance costy
-@export var IgnoredByCompiler: bool = true
-
 @export_group("Textures")
 @export var texture_center: Texture2D
 @export var textures_top_left: Array[Texture2D] = []
@@ -27,8 +24,7 @@ const SegmentsOffset: int = 2
 @export var textures_wall_left: Array[Texture2D] = []
 @export var textures_wall_right: Array[Texture2D] = []
 
-func _init() -> void:
-	set_meta("qol_excluded", 1)
+func _init() -> void: set_meta("qol_excluded", 1)
 
 func _process(_delta: float) -> void:
 	global_position = global_position.snappedf(TextureSegmentSize)

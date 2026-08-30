@@ -125,16 +125,6 @@ static func _parse(xml: PackedByteArray) -> XMLDocument:
 				queue.back().children.append(node)
 				queue.append(node)  # move into our node's body
 
-	# if parsing ended, but there are still unclosed nodes, we report it
-	if not queue.is_empty():
-		queue.reverse()
-		var names: Array[String] = []
-
-		for node in queue:
-			names.append(node.name)
-
-		push_error("The following nodes were not closed: %s" % ", ".join(names))
-
 	return doc
 
 

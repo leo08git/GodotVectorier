@@ -4,12 +4,13 @@ var xml: XMLNode
 var LevelNode: LevelRoot
 
 func _parse_class(object: ClassBase, data: Dictionary) -> void:
-	if not (object is ClassContainer) and not (object is ClassPrefab) and object.get_child_count() > 0:
-		_parse_node(object, data)
+	if not (object is ClassObject) and not (object is ClassPrefab) and object.get_child_count() > 0:
+		_parse_node_children(object, data)
 
 	var RootObjects = data.get_or_add("RootObjects", [])
 	var factors = data.get_or_add("factors", [])
 	var models = data.get_or_add("models", [])
+
 	RootObjects.append(object)
 
 	if object is ClassFactor:
@@ -21,38 +22,19 @@ func _parse_class(object: ClassBase, data: Dictionary) -> void:
 		models.append(object)
 
 func _parse_non_class(object: Node, data: Dictionary) -> void:
-	_parse_node(object, data)
-	var PendingAutoPlatforms = data.get_or_add("PendingAutoPlatforms", [])
+	_parse_node_children(object, data)
 
-	if object is AutoPlatform:
-		if object.IgnoredByCompiler: return
-		PendingAutoPlatforms.append(object)
-
-func _parse_node(node: Node, data: Dictionary) -> void:
+func _parse_node_children(node: Node, data: Dictionary) -> void:
 	for object in node.get_children():
-		if object is ClassBase: 
-			_parse_class(object, data)
-
-		else:
-			_parse_non_class(object, data)
+		if object is ClassBase: _parse_class(object, data)
+		else: _parse_non_class(object, data)
 
 func _FactorToString(factor: float) -> String:
 	return str(factor).trim_suffix(".0")
 
 func Parse(level: LevelRoot) -> Dictionary:
-	var data = {}
-	_parse_node(level, data)
-
-	var AutoPlatforms = data.get_or_add("PendingAutoPlatforms", [])
-	var AutoPlatformsResults = []
-
-	if not AutoPlatforms.is_empty(): # Handle autoplatforms
-		print("Now building platforms...")
-		for platform: AutoPlatform in AutoPlatforms:
-			var platform_root: Node = await platform.build(5)
-			_parse_node(platform_root, data)
-			AutoPlatformsResults.append(platform_root)
-		print("Done building platforms.")
+	var data = {"root":level}
+	_parse_node_children(level, data)
 
 	var factors = data.get_or_add("factors", [])
 	var models = data.get_or_add("models", [])
@@ -78,20 +60,23 @@ func Parse(level: LevelRoot) -> Dictionary:
 		structure.Sets.children.append(XMLNode.new("City", {"FileName":_set_}, true))
 
 	for model in models: 
-		if model.HunterMode:
-			structure.ModelsHunter.children.append(model.get_xml_node())
-		else:
-			structure.ModelsCommon.children.append(model.get_xml_node())
+		match model.TargetMode:
+			ClassBase.TargetModes.ALL:
+				structure.ModelsCommon.children.append(model.get_xml_node())
+				structure.ModelsHunter.children.append(model.get_xml_node())
+			ClassBase.TargetModes.HunterMode:
+				structure.ModelsHunter.children.append(model.get_xml_node())
+			ClassBase.TargetModes.CommonMode:
+				structure.ModelsCommon.children.append(model.get_xml_node())
 
 	for object in RootObjects:
-		var node = object.get_xml_node()
 		if not object is ClassFactor: continue
+		var node = Helper.ProcessClassXmlMode(object.get_xml_node(), object)
 		if not node: printerr("Couldn't get XML from \"%s\"." % object.name); continue
 
 		var object_factor = _FactorToString(object.factor)
-		structure.Track.get(object_factor).append(node)
-
-	EditorAutoload.LevelPreSort.emit(structure, root)
+		var factor_holder = structure.Track.get(object_factor)
+		factor_holder.append(node)
 
 	for structure_xml in structure.values(): 
 		if structure_xml is XMLNode:
@@ -106,13 +91,8 @@ func Parse(level: LevelRoot) -> Dictionary:
 		factor_xml.append(content_xml)
 		content_xml.children.append_array(structure.Track[factor])
 
-	EditorAutoload.LevelPosSort.emit(root)
-
 	LevelNode = level
 	xml = root
-
-	for result in AutoPlatformsResults:
-		result.queue_free()
 
 	return structure
 

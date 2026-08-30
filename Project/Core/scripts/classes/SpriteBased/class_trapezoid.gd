@@ -9,9 +9,13 @@ enum types {upwards, downwards}
 		trapezoid_type = value
 		_type_changed.call_deferred()
 
+func _class_initiate() -> void:
+	(self as ClassTrapezoid)._type_changed.call_deferred()
+	set("texture", preload("uid://c3kl1rnb1d2xa"))  # Texture correction
+
 func get_xml_node() -> XMLNode:
 	var pos = Helper.get_class_position(self)
-	var size = get("global_transform").get_scale() * get("texture").get_size()
+	var size = Helper.get_class_dimensions(self)
 	var req_attributes = {
 		"X":pos.x, 
 		"Y":pos.y, 

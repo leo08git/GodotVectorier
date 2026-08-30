@@ -1,5 +1,5 @@
 @tool
-## A class to represent an ingame level model
+## A class to represent an ingame level model spawn point.
 extends ClassFactor
 class_name ClassModelSpawn
 
@@ -10,13 +10,10 @@ class_name ClassModelSpawn
 
 func get_xml_node() -> XMLNode:
 	var pos = Helper.get_class_position(self)
-	var size = get("scale") * get("texture").get_size()
 
 	var req_attributes = {
 		"X":pos.x ,
 		"Y":pos.y ,
-		"Width":size.x ,
-		"Height":size.y ,
 		"Name":spawn_id ,
 		"Animation":spawn_animation}
 
@@ -33,7 +30,10 @@ func _create_model() -> void:
 	model_node.LinkedSpawnPoint = self
 	spawn_id = model_node.attributes["BirthSpawn"]
 
-func _ClassInitiate() -> void:
-	if get_class() == "Sprite2D":
-		var dimensions: Vector2 = get("scale") * get("texture").get_size()
-		set_indexed("offset:y", -dimensions.y / 2)
+func ClassInitiate() -> void:
+	var dimensions: Vector2 = get("scale") * get("texture").get_size()
+	var half = -dimensions.y / 2
+
+	if get_class() == "Sprite2D" and get_indexed("offset:y") != half:
+		set_indexed("offset:y", half)
+		set_indexed("position:y", get("position").y - half)

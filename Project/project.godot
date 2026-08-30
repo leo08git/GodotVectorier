@@ -33,6 +33,10 @@ Helper="*uid://did2x5ga7gkrm"
 
 project/assembly_name="vectorier_godot"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-sqlite/plugin.cfg")
+
 [file_customization]
 
 folder_colors={

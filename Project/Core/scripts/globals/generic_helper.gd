@@ -1,5 +1,6 @@
 @tool
 extends Node
+var eztrigger := EzTrigger.new()
 
 const LocalizationAttributeKeys: PackedStringArray = [
 	"eng",
@@ -39,9 +40,12 @@ const class_templates = {
 const SettingsPath := "res://settings.json"
 
 ## Recursive children get
-func get_all_children(root: Node) -> Array[Node]:
+func get_all_children(root: Node, exclude_scene_instances: bool = true) -> Array[Node]:
 	var nodes: Array[Node] = []
 	for node in root.get_children():
+		if not node.scene_file_path.is_empty() and exclude_scene_instances: 
+			node.name = node.scene_file_path.get_file().trim_suffix("."+node.scene_file_path.get_extension())
+			continue
 		nodes.append(node)
 		if node.get_child_count() > 0:
 			nodes.append_array(get_all_children(node))
@@ -92,7 +96,8 @@ func get_all_files_relative(folder: String , relative_path = "", extension_filte
 ## Adds a node to the tree and set its owner (editor-adapted), if owner_ is null then set it to the editor tree.
 func add_node(node: Node, parent: Node = null, owner_: Node = null, undo_allow: bool = false) -> void:
 	parent = EditorInterface.get_edited_scene_root() if (parent == null) else parent
-	parent.add_child(node)
+	parent.add_child.call_deferred(node)
+	await node.tree_entered
 	node.owner = EditorInterface.get_edited_scene_root() if (owner_ == null) else owner_
 
 	if undo_allow:
@@ -135,11 +140,10 @@ func xml_to_instance(node: XMLNode, debug: bool = false) -> Node:
 			if not node.children.is_empty():
 				var _matrix: XMLNode = node.find_child("Matrix")
 				var _dimensions: Vector2 = instance.get("texture").get_size() * instance.get("scale")
-		"Trapezoid":
-			var idx = (instance.scale as Vector2).max_axis_index()
-			instance.scale = Vector2(instance.scale[idx], instance.scale[idx])
+		"Trapezoid": 
 			instance.set_deferred("type", int(node.attributes["Type"]) - 1)
 			(instance as ClassTrapezoid)._type_changed.call_deferred()
+			instance.scale.y = instance.scale.x
 		"Area":
 			instance.area_name = node.attributes["Name"]
 		"Trigger":
@@ -179,7 +183,7 @@ func quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Vector
 ## Find a object's ancestor container (NOT really efficient but yk)
 func find_ancestor_container(child: Node) -> Node2D:
 	if child == null: return null
-	if child.get_parent() is LevelRoot or child.get_parent() is ClassContainer:
+	if child.get_parent() is LevelRoot or child.get_parent() is ClassObject:
 		return child.get_parent()
 	else:
 		return find_ancestor_container(child.get_parent())
@@ -191,13 +195,14 @@ func get_class_position(node: ClassBase) -> Vector2:
 	var result: Vector2 = container_ancestor.to_local(node.global_position).snappedf(0.01 if get_setting("snap_coordinates_to_2_decimals") else 0.0)
 	return result
 
-
 func get_class_dimensions(node: ClassBase) -> Vector2:
-	if node.get_class() == "Sprite2D":
-		return node.scale * node.texture.get_size()
-	elif node.get_class() == "TextureRect":
-		var rect = node.get_global_rect()
-		return Vector2(rect.size.x, rect.size.y)
+	match node.get_class():
+		"Sprite2D":
+			return node.global_transform.get_scale() * node.texture.get_size()
+		"TextureRect":
+			var rect = node.get_global_rect()
+			return Vector2(rect.size.x, rect.size.y)
+
 	return Vector2()
 
 func get_viewport_camera_pos() -> Vector2:
@@ -207,12 +212,8 @@ func get_viewport_camera_zoom() -> Vector2:
 	return EditorInterface.get_editor_viewport_2d().global_canvas_transform.get_scale()
 
 func process_unity_scene(scene: UnityScene, root: Node) -> void:
-	for object in scene.GameObjects.values():
-		if not object.transform:
-			printerr("[Helper while processing unity scene] A unity scene object has been ignored since it has no transform components.")
-			continue
-		if str(object.transform.data.m_Father.fileID) == &"0":
-			process_unity_object(object, root)
+	for object in scene.OrphanGameObjects:
+		process_unity_object(object, root)
 
 func process_unity_object(object: UnityGameObject, parent: Node) -> void:
 	var instance = UnityHelper.obj_to_node(object)
@@ -244,8 +245,8 @@ func process_unity_object(object: UnityGameObject, parent: Node) -> void:
 		object.transform.apply_data(instance)
 		for component in object.components: component.apply_data(instance)
 
-	var tname = object.data.get(&"m_Name")
-	instance.name = tname if tname != null else "Unnamed"
+		var tname = object.data.get(&"m_Name")
+		instance.name = tname if tname != null else "Unnamed"
 
 	for child in object.children:
 		process_unity_object(child, instance)
@@ -319,18 +320,29 @@ func is_vector_running() -> bool:
 	return "Vector.exe" in str(output)
 
 func tree_to_xml(root: Node) -> Array[XMLNode]:
-	var dict: Dictionary[XMLNode, Node] = {}
 	var result: Array[XMLNode] = []
 
 	for child in root.get_children():
 		if (child is ClassBase):
 			var xml = child.get_xml_node()
 			if not xml: continue
-			dict[xml] = child
 
-	for xml in dict:
-		var node = dict[xml]
-		xml.children.append_array(tree_to_xml(node))
-		result.append(xml)
+			if child.get_child_count() > 0:
+				result.append_array(tree_to_xml(child))
+
+			result.append(xml)
 
 	return result
+
+func ProcessClassXmlMode(class_xml: XMLNode, class_object: ClassBase) -> XMLNode:
+	match class_object.TargetMode: # Mode
+		ClassBase.TargetModes.ALL: return class_xml
+		_:
+			var _static = (class_xml.get_child_or_add("Properties")).get_child_or_add("Static")
+			var ModeString = ClassBase.TargetModes.keys()[class_object.TargetMode]
+			var _selection = XMLNode.new("Selection" , {
+				"Choice" : "AITriggers", "Variant" : ModeString }, true)
+			_static.append(_selection)
+			class_xml.standalone = false
+
+	return class_xml

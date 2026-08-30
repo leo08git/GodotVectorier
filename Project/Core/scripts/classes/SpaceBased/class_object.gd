@@ -1,5 +1,6 @@
 @tool
-extends ClassContainer
+extends ClassFactor
+## Container class that holds all objects inside itself, includes position x and y as attributes.
 class_name ClassObject
 
 func get_xml_node() -> XMLNode:
