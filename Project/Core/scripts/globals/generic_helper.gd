@@ -1,6 +1,5 @@
 @tool
 extends Node
-var eztrigger := EzTrigger.new()
 
 const LocalizationAttributeKeys: PackedStringArray = [
 	"eng",
@@ -210,108 +209,6 @@ func get_viewport_camera_pos() -> Vector2:
 
 func get_viewport_camera_zoom() -> Vector2:
 	return EditorInterface.get_editor_viewport_2d().global_canvas_transform.get_scale()
-
-func process_unity_scene(scene: UnityScene, root: Node) -> void:
-	for object in scene.OrphanGameObjects:
-		process_unity_object(object, root)
-
-func process_unity_object(object: UnityGameObject, parent: Node) -> void:
-	var instance = UnityHelper.obj_to_node(object)
-
-	if instance:
-		instance.set_meta("qol_excluded", 1)
-		var predicted_script_data: Dictionary = evaluate_gameobject_vectorier_script(object)
-
-		add_node(instance, parent if is_instance_valid(parent) else EditorInterface.get_edited_scene_root())
-
-		if is_instance_valid(predicted_script_data.script): 
-			instance.set_script(predicted_script_data.script)
-
-			for property in predicted_script_data.tag_properties:
-				var value = (predicted_script_data.tag_properties)[property]
-				instance.set(property, value)
-
-			for property in predicted_script_data.tag_auto_properties:
-				var getter = (predicted_script_data.tag_auto_properties)[property]
-				var get_result = object.data.get(getter)
-				if get_result == null:
-					for c in object.components:
-						if not c.data.has(getter): continue
-						get_result = c.data.get(getter)
-						break
-
-				instance.set(property, get_result)
-
-		object.transform.apply_data(instance)
-		for component in object.components: component.apply_data(instance)
-
-		var tname = object.data.get(&"m_Name")
-		instance.name = tname if tname != null else "Unnamed"
-
-	for child in object.children:
-		process_unity_object(child, instance)
-
-func evaluate_gameobject_vectorier_script(object: UnityGameObject) -> Dictionary:
-	var tag = object.data.get("m_TagString", &"")
-
-	var TagOptions: Array[Dictionary] = [
-
-		{
-					"script" : preload("uid://b8ywmahn8mr4h") , # Image
-					"tag" : ["Backdrop", "Image", "Top Image"] ,
-					"tag_properties" : {
-						"Backdrop" : {"factor":ClassFactor.PRESETS.Backdrop} ,
-						"Top Image" : {"factor":ClassFactor.PRESETS.Overlay}}
-		} ,
-
-		{
-					"script" : preload("uid://cyjvkka35b16s") , # Platform
-					"tag" : "Platform" ,
-					"tag_properties" : {} 
-		} ,
-
-		{
-					"script" : preload("uid://c4ag38qtr1hm7") , # Trigger
-					"tag" : "Trigger" ,
-					"tag_properties" : {} ,
-					"tag_auto_param_pass" : {"Command":"Content"}
-		} ,
-
-		{
-					"script" : preload("uid://b0w1m0eeyay8k") , # Area
-					"tag" : "Area" ,
-					"tag_properties" : {} ,
-					"tag_auto_param_pass" : {"area_name":"m_Name"}
-		} ,
-
-		]
-
-	var tag_properties: Dictionary = {}
-	var tag_auto_param_pass: Dictionary = {}
-	var target_script: GDScript = null
-
-	for option: Dictionary in TagOptions:
-		if ((option.tag is Array) and option.tag.has(tag)) or ((option.tag is String) and option.tag == tag):
-			target_script = option.script
-
-			if option.tag is Array:
-				tag_properties = option.tag_properties.get(tag, {})
-			else:
-				tag_properties = option.tag_properties
-
-			tag_auto_param_pass = option.get("tag_auto_param_pass", {})
-
-			break
-
-	if target_script == null:
-		push_warning("[Helper while predicting a Unity scene GameObject] Couldn't find a class match for object \"%s\" with tag \"%s\", defaulting to ClassBase." % [object.data.get("m_Name", &""), tag])
-		target_script = preload("uid://bqceui7yj7wyd")
-
-	return {
-		"script":target_script, 
-		"tag_properties": tag_properties ,
-		"tag_auto_properties" : tag_auto_param_pass
-		}
 
 func is_vector_running() -> bool:
 	var output := []
