@@ -86,7 +86,7 @@ func transform_preview() -> void:
 
 			var t := float(current_frame) / interval.duration_frames
 
-			var point := Helper.quadratic_bezier(p0, p1, p2, t)
+			var point = Helper.quadratic_bezier(p0, p1, p2, t)
 
 			set("global_position", origin + point)
 
