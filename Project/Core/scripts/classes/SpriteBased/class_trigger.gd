@@ -3,9 +3,11 @@ extends ClassFactor
 class_name ClassTrigger
 const TRIGGER_TEMPLATES = preload("uid://bp7w84ksmuoxw")
 
-## ZapXML is a interface to make triggers.
-@export_tool_button("Command helper called ZapXML (Github link)" , "TextureRect") var open_xzap = func(): OS.shell_open("https://github.com/leo08git/ZapXML2src")
+@export_tool_button("EzTrigger documentation" , "TextEdit") var tb_ezTrigger = func(): EditorInterface.get_script_editor().goto_help("class_name:EzTrigger")
 @export_multiline var Command = ""
+## Use the [EzTrigger] system instead of utilizing normal command format
+@export var useEzTrigger: bool = false
+
 func _get_property_list() -> Array[Dictionary]:
 	var properties: Array[Dictionary] = []
 	var enum_list = TRIGGER_TEMPLATES.templates.keys()
@@ -49,7 +51,9 @@ func get_xml_node() -> XMLNode:
 
 	var node = XMLNode.new("Trigger", req_attrs)
 	var xml_sub = XMLNode.new("Content")
-	xml_sub.content = Command
+	var content = Command
+	if useEzTrigger: content = EzTrigger.quickConvert(Command)
+	xml_sub.content = content
 	node.children.append(xml_sub)
 
 	return node

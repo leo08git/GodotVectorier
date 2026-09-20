@@ -98,21 +98,11 @@ func transform_preview() -> void:
 
 func get_xml_node() -> XMLNode:
 	var parent_node: XMLNode = super.get_xml_node()
-	var transformation_node: XMLNode = XMLNode.new("Transformation", {"Name":transform_name})
-	var interval_content_node := XMLNode.new("Move")
-	var properties_node: XMLNode
-
-	if parent_node.has_child("Properties"):
-		properties_node = parent_node.Properties
-	else:
-		properties_node = XMLNode.new("Properties")
-		parent_node.children.append(properties_node)
-
-	var dynamic_node := XMLNode.new("Dynamic")
-
-	properties_node.children.append(dynamic_node)
-	dynamic_node.children.append(transformation_node)
-	transformation_node.children.append(interval_content_node)
+	parent_node.standalone = false
+	var properties_node: XMLNode = parent_node.get_child_or_add("Properties")
+	var dynamic_node := properties_node.get_child_or_add("Dynamic")
+	var transformation_node: XMLNode = dynamic_node.get_child_or_add("Transformation", {"Name":transform_name})
+	var interval_content_node := transformation_node.get_child_or_add("Move")
 
 	var interval_idx: int = 0
 	for interval in move_intervals:

@@ -106,15 +106,15 @@ func _on_child_entered_tree(node: Node) -> void:
 	if node.has_meta("_editor_processed"): return
 	if node.has_meta("qol_excluded"): return
 
-	if sprite2d_fix_pivot and node is Sprite2D:
+	if sprite2d_fix_pivot and node.get_class() == "Sprite2D":
 		node.centered = false
 		await get_tree().process_frame
 		node.global_position -= (node.scale * node.texture.get_size()) / 2
 
 	if sprite2d_script_set and node.get_script() == null:
-		if node is Sprite2D:
-			node.set_script(preload("uid://b8ywmahn8mr4h"))
-		elif node is Node2D:
-			node.set_script(preload("uid://bqceui7yj7wyd"))
+		if node.get_class() == "Sprite2D":
+			node.set_script(preload("uid://b8ywmahn8mr4h")) # Sprite class
+		elif node.get_class() == "Node2D":
+			node.set_script(preload("uid://bqceui7yj7wyd")) # Base class
 
 	node.set_meta("_editor_processed", 1)

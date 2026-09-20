@@ -92,7 +92,8 @@ func get_all_files_relative(folder: String , relative_path = "", extension_filte
 
 	return array
 
-## Adds a node to the tree and set its owner (editor-adapted), if owner_ is null then set it to the editor tree.
+## Adds a node to the tree and set its owner (editor-adapted), if owner_ is null then set it to the editor tree.[br]
+## If parent is null, adds it to the top of the tree.
 func add_node(node: Node, parent: Node = null, owner_: Node = null, undo_allow: bool = false) -> void:
 	parent = EditorInterface.get_edited_scene_root() if (parent == null) else parent
 	parent.add_child.call_deferred(node)
@@ -191,7 +192,7 @@ func find_ancestor_container(child: Node) -> Node2D:
 ## Why? every change I had to make I had to change on every single script :c
 func get_class_position(node: ClassBase) -> Vector2:
 	var container_ancestor = find_ancestor_container(node)
-	var result: Vector2 = container_ancestor.to_local(node.global_position).snappedf(0.01 if get_setting("snap_coordinates_to_2_decimals") else 0.0)
+	var result: Vector2 = container_ancestor.to_local(node.global_position).snappedf(0.01 if get_setting("coordinates_fix") else 0.0)
 	return result
 
 func get_class_dimensions(node: ClassBase) -> Vector2:
@@ -205,10 +206,20 @@ func get_class_dimensions(node: ClassBase) -> Vector2:
 	return Vector2()
 
 func get_viewport_camera_pos() -> Vector2:
-	return EditorInterface.get_editor_viewport_2d().global_canvas_transform.origin
+	var v = EditorInterface.get_editor_viewport_2d()
+	if !v: return Vector2.ZERO
+	return v.global_canvas_transform.origin
 
 func get_viewport_camera_zoom() -> Vector2:
-	return EditorInterface.get_editor_viewport_2d().global_canvas_transform.get_scale()
+	var v = EditorInterface.get_editor_viewport_2d()
+	if !v: return Vector2.ZERO
+	return v.get_editor_viewport_2d().global_canvas_transform.get_scale()
+
+func get_cursor_position() -> Vector2: return get_window().get_mouse_position() + Vector2(get_window().position)
+
+func get_global_cursor_position() -> Vector2: 
+	if !EditorAutoload.level: printerr("[Generic Helper] Tried getting cursor position but we do not have a loaded level yet!"); return Vector2.ZERO
+	return EditorAutoload.level.get_global_mouse_position()
 
 func is_vector_running() -> bool:
 	var output := []

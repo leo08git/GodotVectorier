@@ -4,6 +4,12 @@ class_name ClassImage
 const PLATFORM = preload("uid://cwal0qfn1frnq")
 const TRAPEZOID = preload("uid://bw5v4qobjrvt8")
 
+@export var color := Color(1.0, 1.0, 1.0, 1.0):
+	set(col):
+		#col.a = 1.0
+		color = col
+		self.modulate = col
+
 @export_tool_button("Create collision") var toolbutton_create_platform = _create_platform
 @export_tool_button("To TextureRect") var toolbutton_torect = _to_texturerect
 
@@ -19,33 +25,33 @@ func get_xml_node() -> XMLNode:
 	req_attrs.merge(attributes, true)
 	var node := XMLNode.new("Image", req_attrs, true)
 
-	if get_class() == "Sprite2D" and not is_zero_approx(get("global_rotation")):
-		node.standalone = false
-		var properties := XMLNode.new("Properties")
-		var _static := XMLNode.new("Static")
-		var matrix := XMLNode.new("Matrix", {}, true)
+	if get_class() == "Sprite2D":
+		var properties := node.get_child_or_add("Properties", {}, false)
+		var _static := properties.get_child_or_add("Static", {}, false)
 
-		var t: Transform2D = get("global_transform")
-		var angle: float = t.get_rotation()
-		var A: float =  imgsize.x * cos(angle)
-		var B: float =  imgsize.x * sin(angle)
-		var C: float = -imgsize.y * sin(angle)
-		var D: float =  imgsize.y * cos(angle)
+		if not color.is_equal_approx(Color.WHITE):
+			var ownColor: String = color.to_html(true)
+			_static.get_child_or_add("StartColor", {"Color"=ownColor}, true)
 
-		matrix.attributes = {
-			"A" : A ,
-			"B" : B ,
-			"C" : C ,
-			"D" : D ,
-			"Tx" : 0 ,
-			"Ty" : 0 ,
-		}
+		if not is_zero_approx(self.global_rotation): # rotation
+			node.standalone = false
+			var matrix := _static.get_child_or_add("Matrix", {}, true)
 
+			var t: Transform2D = self.global_transform
+			var angle: float = t.get_rotation()
+			var A: float =  imgsize.x * cos(angle)
+			var B: float =  imgsize.x * sin(angle)
+			var C: float = -imgsize.y * sin(angle)
+			var D: float =  imgsize.y * cos(angle)
 
-
-		_static.children.append(matrix)
-		properties.children.append(_static)
-		node.children.append(properties)
+			matrix.attributes = {
+				"A" : A ,
+				"B" : B ,
+				"C" : C ,
+				"D" : D ,
+				"Tx" : 0 ,
+				"Ty" : 0 ,
+			}
 
 	return node
 

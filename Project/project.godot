@@ -26,7 +26,6 @@ config/icon="uid://bjyegpkf3d2n8"
 GlobalEditorPlugin="*uid://c4irmptrgr8nb"
 EditorAutoload="*uid://cxs7lw84dorro"
 EditorDzHandler="*uid://t3a7bnqr6vko"
-EditorFun="*uid://baafia1a8mp4g"
 Helper="*uid://did2x5ga7gkrm"
 
 [dotnet]
@@ -35,7 +34,7 @@ project/assembly_name="vectorier_godot"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-sqlite/plugin.cfg")
+enabled=PackedStringArray("res://addons/zylann.editor_debugger/plugin.cfg")
 
 [file_customization]
 
@@ -54,6 +53,10 @@ folder_colors={
 "res://user/textures/": "yellow",
 "res://user/textures/misc/": "yellow"
 }
+
+[gui]
+
+timers/tooltip_delay_sec=0.0
 
 [rendering]
 

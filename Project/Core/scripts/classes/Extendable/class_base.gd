@@ -15,6 +15,7 @@ signal AttributeChanged(attribute: String, old_value: Variant, new_value: Varian
 	EditorInterface.get_editor_toaster().push_toast("Remember to empty it because those attributes will override generated ones!", EditorToaster.SEVERITY_INFO)
 	attributes.merge(get_xml_node().attributes)
 	notify_property_list_changed.call_deferred()
+@export_tool_button("Print string") var tb_ps = func(): print(get_xml_node().dump_str(true))
 
 ## If this class should be included in export
 @export var enabled := true

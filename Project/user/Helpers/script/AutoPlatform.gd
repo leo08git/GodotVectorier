@@ -27,6 +27,7 @@ const SegmentsOffset: int = 2
 func _init() -> void: set_meta("qol_excluded", 1)
 
 func _process(_delta: float) -> void:
+	if !is_inside_tree(): return
 	global_position = global_position.snappedf(TextureSegmentSize)
 	scale = scale.snappedf(TextureSegmentSize)
 	rotation = 0.0
@@ -40,7 +41,6 @@ func build(MaxIterations: int = -1) -> void:
 	var parent := Node2D.new()
 	Helper.add_node(parent, get_parent())
 	parent.name = "Platform"
-	parent.global_position = global_position
 
 	var Edge: Vector2 = scale - Vector2(TextureSegmentSize, TextureSegmentSize)
 
@@ -128,6 +128,6 @@ func _create_sprite(pos: Vector2, _texture: Texture2D, parent: Node, scale_margi
 	sprite.global_position = pos - scale_margin
 	sprite.scale = (Vector2(TextureSegmentSize, TextureSegmentSize) / _texture.get_size()) + scale_margin
 	sprite.set_script(preload("uid://b8ywmahn8mr4h"))
-	sprite.name = (_texture.resource_path.get_file().get_slice(".", 0))
+	sprite.name = (_texture.resource_path.get_file().get_basename())
 
 	return sprite
