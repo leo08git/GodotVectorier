@@ -52,5 +52,5 @@ func _get(property: StringName) -> Variant:
 	return null
 
 func _attribute_changed(attribute: StringName, new_value: Variant) -> void:
-	if attribute == "BirthSpawn" and is_instance_valid(LinkedSpawnPoint):
+	if attribute == &"BirthSpawn" and is_instance_valid(LinkedSpawnPoint):
 		LinkedSpawnPoint.spawn_id = new_value

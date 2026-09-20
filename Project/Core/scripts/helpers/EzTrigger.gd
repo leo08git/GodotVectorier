@@ -272,5 +272,4 @@ static func parseAction(subject: String, regEx: RegEx) -> PackedStringArray:
 static func quickConvert(ezTriggerContent: String) -> String:
 	var i = EzTrigger.new()
 	var doc = i.read(ezTriggerContent)
-	print(doc.vars)
 	return doc.toString()
